@@ -1,6 +1,6 @@
 import base64
-from unsafe import Encryptor
-from strings import wordlist
+from unsafe.cryptography.encrypt import Encryptor
+from unsafe.strings import wordlist
 # from exceptions import UnknownEncoding
 # from typing import Union
 
@@ -415,6 +415,3 @@ class Decrypter:
         else:
             raise TypeError('"word" Argument Type Must be : str or list')
 
-
-# abc = Decryptor()
-# print(abc.text_decrypt('527bd5b5d689e2c32ae974c6229ff785'))

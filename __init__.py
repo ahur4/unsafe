@@ -1,9 +1,9 @@
-from .cryptography import Encryptor
-from .cryptography import Decrypter
-from .proxies import Proxy
-from .bruteforce import BruteForcer
-from .wordpress import Wordpress
-from .strings import (
+from unsafe.cryptography.encrypt import Encryptor
+from unsafe.cryptography.decrypt import Decrypter
+from unsafe.proxies.proxy import Proxy
+from unsafe.bruteforce.admin_finder import BruteForcer
+from unsafe.wordpress.wp import Wordpress
+from unsafe.strings import (
     wordlist,
     ua,
     aspx_login,
@@ -16,4 +16,4 @@ from .strings import (
     js_login,
     slash_login
 )
-from .exceptions import UnknownEncoding, NotWordpress, SiteNotFound, UsersFileNotFound, NotFoundData
+from unsafe.exceptions import UnknownEncoding, NotWordpress, SiteNotFound, UsersFileNotFound, NotFoundData

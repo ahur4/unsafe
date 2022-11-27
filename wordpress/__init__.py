@@ -1,1 +1,0 @@
-from .wp import Wordpress

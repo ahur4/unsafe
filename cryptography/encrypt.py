@@ -1,7 +1,7 @@
 from typing import Union
 import base64
 import hashlib
-from unsafe import UnknownEncoding
+from unsafe.exceptions import UnknownEncoding
 
 
 class Encryptor:
@@ -212,6 +212,3 @@ class Encryptor:
                 raise ValueError('This Hash Method Not Available !')
         except Exception as e:
             raise e
-
-# a = Encryptor()
-# print(a.text_encrypt('john',hash_method='md5'))

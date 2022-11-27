@@ -2,8 +2,8 @@ import requests
 import threading
 import time
 import json
-from strings import wp_plugins1, wp_plugins2
-from .. import NotWordpress, SiteNotFound, UsersFileNotFound, NotFoundData
+from unsafe.strings import wp_plugins1, wp_plugins2
+from unsafe.exceptions import NotWordpress, SiteNotFound, UsersFileNotFound, NotFoundData
 
 plugins_list = []
 counter = 0

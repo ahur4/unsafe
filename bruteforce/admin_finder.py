@@ -1,5 +1,4 @@
-from unsafe.strings import aspx_login, asp_login, php_login, html_login, cgi_login, brf_login, cfm_login, js_login, \
-    slash_login, ua
+from unsafe.strings import aspx_login, asp_login, php_login, html_login, cgi_login, brf_login, cfm_login, js_login, slash_login, ua
 import requests
 import random
 
@@ -47,10 +46,12 @@ class BruteForcer:
         for i in links:
             try:
                 if proxy:
-                    proxy = {"http": "http://" + str(proxy), "https": "http://" + str(proxy)}
+                    proxy = {"http": "http://" +
+                             str(proxy), "https": "http://" + str(proxy)}
                 if proxies:
                     random_proxy = random.choice(proxies)
-                    proxy = {"http": "http://" + str(random_proxy), "https": "http://" + str(random_proxy)}
+                    proxy = {
+                        "http": "http://" + str(random_proxy), "https": "http://" + str(random_proxy)}
                 if not user_agent:
                     user_agent = random.choice(ua)
                 header = {"User-Agent": user_agent}

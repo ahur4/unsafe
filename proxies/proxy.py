@@ -111,6 +111,3 @@ class Proxy:
             except:
                 pass
         return proxy_status
-
-a = Proxy()
-print(a.wrapper())
