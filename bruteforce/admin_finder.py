@@ -1,4 +1,4 @@
-from strings import aspx_login, asp_login, php_login, html_login, cgi_login, brf_login, cfm_login, js_login, \
+from unsafe.strings import aspx_login, asp_login, php_login, html_login, cgi_login, brf_login, cfm_login, js_login, \
     slash_login, ua
 import requests
 import random

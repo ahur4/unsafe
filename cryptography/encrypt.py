@@ -1,7 +1,7 @@
 from typing import Union
 import base64
 import hashlib
-from exceptions import UnknownEncoding
+from unsafe import UnknownEncoding
 
 
 class Encryptor:

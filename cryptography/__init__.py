@@ -1,2 +1,2 @@
-from encrypt import Encryptor
-from decrypt import Decrypter
+from unsafe.cryptography.encrypt import Encryptor
+from unsafe.cryptography.decrypt import Decrypter

@@ -1,1 +1,1 @@
-from admin_finder import BruteForcer
+from .admin_finder import BruteForcer

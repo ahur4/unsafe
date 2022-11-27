@@ -1,0 +1,17 @@
+LICENSE
+README.md
+pyproject.toml
+setup.py
+unsafe/bruteforce/__init__.py
+unsafe/bruteforce/admin_finder.py
+unsafe/cryptography/__init__.py
+unsafe/cryptography/decrypt.py
+unsafe/cryptography/encrypt.py
+unsafe/proxies/__init__.py
+unsafe/proxies/proxy.py
+unsafe/unsafe.egg-info/PKG-INFO
+unsafe/unsafe.egg-info/SOURCES.txt
+unsafe/unsafe.egg-info/dependency_links.txt
+unsafe/unsafe.egg-info/top_level.txt
+unsafe/wordpress/__init__.py
+unsafe/wordpress/wp.py

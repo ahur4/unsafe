@@ -1,5 +1,5 @@
 import base64
-from .encrypt import Encryptor
+from unsafe import Encryptor
 from strings import wordlist
 # from exceptions import UnknownEncoding
 # from typing import Union
