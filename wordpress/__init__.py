@@ -1,1 +1,1 @@
-from wp import Wordpress
+from .wp import Wordpress
