@@ -14,7 +14,7 @@ class Wordpress:
     def __init__(self):
         pass
 
-    async def wp_checker(self, domain: str):
+    def wp_checker(self, domain: str):
         if 'http://' in domain:
             domain = domain.replace('http://', '')
         elif 'https://' in domain:
@@ -31,7 +31,7 @@ class Wordpress:
             return False
         return True
 
-    async def user(self, domain: str):
+    def user(self, domain: str):
         try:
             if 'http://' in domain:
                 domain = domain.replace('http://', '')
@@ -39,7 +39,7 @@ class Wordpress:
                 domain = domain.replace('https://', '')
             else:
                 domain = domain
-            if not await self.wp_checker(domain):
+            if not self.wp_checker(domain):
                 raise NotWordpress(domain)
         except:
             pass
@@ -86,7 +86,7 @@ class Wordpress:
             except Exception as e:
                 print(counter)
 
-    def main(self, url: str):
+    def plugin_scanner(self, url: str):
         if not self.wp_checker(url):
             return 'not wp'
         if 'http://' in url:

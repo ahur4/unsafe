@@ -13,7 +13,7 @@ class Decrypter:
     def __init__(self) -> None:
         pass
 
-    def text_decrypt(self, hash: str, word: str | list = wordlist, encode: str | None = None, hash_method: str = "MD5", **kwargs) -> str | bytes:
+    def text_decrypt(self, hash: str | bytes, word: str | list = wordlist, encode: str | None = None, hash_method: str = "MD5", **kwargs) -> str | bytes:
         """
         function to return encrypted string.
         
@@ -414,4 +414,3 @@ class Decrypter:
                 raise ValueError('This Hash Method Not Available !')
         else:
             raise TypeError('"word" Argument Type Must be : str or list')
-
