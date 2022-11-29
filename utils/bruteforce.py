@@ -8,7 +8,7 @@ class BruteForcer:
     def __init__(self) -> None:
         pass
 
-    def admin(self, domain: str, timeout: int = 10, ext: str = "php", user_agent: str | None = None,
+    def admin_finder(self, domain: str, timeout: int = 10, ext: str = "php", user_agent: str | None = None,
               cookie: str | None = None, proxy: str | None = None, proxies: list | None = None):
 
         if "http://" in domain:

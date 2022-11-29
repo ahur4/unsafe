@@ -1,9 +1,9 @@
-from unsafe.cryptography.encrypt import Encryptor
-from unsafe.cryptography.decrypt import Decrypter
-from unsafe.proxies.proxy import Proxy
-from unsafe.bruteforce.admin_finder import BruteForcer
-from unsafe.wordpress.wp import Wordpress
-from unsafe.strings import (
+from unsafe.utils.encrypt import Encryptor
+from unsafe.utils.decrypt import Decrypter
+from unsafe.utils.proxy import Proxy
+from unsafe.utils.bruteforce import BruteForcer
+from unsafe.utils.wp import Wordpress
+from unsafe.utils.strings import (
     wordlist,
     ua,
     aspx_login,

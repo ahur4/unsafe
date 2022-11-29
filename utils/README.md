@@ -1,20 +1,3 @@
-Metadata-Version: 2.1
-Name: unsafe
-Version: 1.0.2
-Summary: Pentesting Module
-Home-page: https://github.com/ahur4/unsafe
-Author: ahura
-Author-email: ahur4 <ahur4.rahmani@gmail.com>
-Project-URL: Homepage, https://github.com/pypa/sampleproject
-Project-URL: Bug Tracker, https://github.com/pypa/sampleproject/issues
-Keywords: hacking,hack,pentest,unsafe
-Classifier: Programming Language :: Python :: 3
-Classifier: License :: OSI Approved :: MIT License
-Classifier: Operating System :: OS Independent
-Requires-Python: >=3.6
-Description-Content-Type: text/markdown
-License-File: LICENSE
-
 # unsafe
 
 Under construction! Not ready for use yet! Currently experimenting and planning!

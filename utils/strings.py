@@ -224,8 +224,7 @@ wordlist = ['123456', '12345', 'password', 'password1', '123456789', '12345678',
             'notused', 'sss']
 
 
-wp_plugins1 = ("""
-wordpress-importer
+wp_plugins = ("""wordpress-importer
 regenerate-thumbnails
 wp-super-cache
 jetpack
@@ -625,10 +624,7 @@ youtube-channel-gallery
 wp-responsive-menu
 powerpress
 wpfront-user-role-editor
-wp-copyprotect""").split('\n')
-
-
-wp_plugins2 = ("""
+wp-copyprotect
 wp-hide-post
 syntaxhighlighter
 simple-page-sidebars
@@ -1027,8 +1023,7 @@ easy-watermark
 speed-booster-pack
 aryo-activity-log
 pc-robotstxt
-clicky
-""").split("\n")
+clicky""").split("\n")
 
 
 php_login = [
