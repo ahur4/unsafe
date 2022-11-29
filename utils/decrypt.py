@@ -1,8 +1,6 @@
 import base64
-from unsafe.cryptography.encrypt import Encryptor
-from unsafe.strings import wordlist
-# from exceptions import UnknownEncoding
-# from typing import Union
+from unsafe.utils.encrypt import Encryptor
+from unsafe.utils.strings import wordlist
 
 
 class Decrypter:

@@ -75,3 +75,20 @@ True
 {'http://example.com': ['http://example.com/wp-login.php']}
 
 ```
+
+- Find Wordpress Plugins and Extract Users.
+
+```python
+
+>>> from unsafe import Wordpress
+>>> wp = Wordpress()
+>>> #get wordpress users
+>>> users = wp.get_user(domain='example.com')
+>>> users
+['admin', 'administrator']
+>>> #max workers count is 5(for now) and default workers count is 3
+>>> plugins = wp.plugin_scanner(url="example.com", timeout=5, workers=5, proxy="http://127.0.0.1:80")
+>>> plugins
+['http://example.com/wp-content/plugins/wordpress-seo/', 'http://example.com/wp-content/plugins/duplicate-post/', 'http://example.com/wp-content/plugins/w3-total-cache/', 'http://example.com/wp-content/plugins/redirection/', 'http://example.com/wp-content/plugins/favicon-by-realfavicongenerator/']
+
+```

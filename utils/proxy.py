@@ -60,7 +60,7 @@ class Proxy:
         else:
             raise ValueError("This Protocol Not Exists.")
 
-    def checker(self, proxy_host: str, proxy_port: str, protocol: str = "http", timeout: int = 5) -> bool:
+    def checker(self, proxy_host: str, proxy_port: str, protocol: str = "http", timeout: int = 2) -> bool:
         """
         ### This Function is to Check if The Proxy is Dead or Not.
 
