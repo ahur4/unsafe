@@ -10,7 +10,7 @@
 >> Available Mathods :
 >> - ##### MD5, SHA1, SHA224, SHA256, SHA384, SHA512, SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, SHAKE256
 >> - ##### BASE16, BASE32, BASE64, BASE64, BASE85, ASCII85, CAESAR
-
+>
 >> p.s : for shake methods(128, 256) and caesar method you must use count parameter in calling function.
 >>
 >> p.s : in encryption and decryption all arguments are optional except words(in encrypt) and hash(in decrypt).
@@ -34,29 +34,13 @@ False
 >>> my_decrypted_md5
 'unsafe'
 ```
-
-> - Hash Cracking and Decode a Encrypted Text
-
-```python
-
->>> from unsafe import Decrypter
->>> dec = Decrypter()
-
->>> #all arguments except words are optional
->>> #hash a text
->>> my_decrypted_md5 = dec.text_decrypt(hash='28488a21527473bec901c7cc2bfbd76b', words='YOUR WORD TO HASH', hash_method='MD5')
->>> my_decrypted_md5
-'YOUR WORD TO HASH'
->>> my_decrypted_shake128 = dec.text_decrypt(hash='5f75455db6b0b3652f20cd6d67972a67746631f3a562', words='Wrong Words', hash_method='SHAKE128')
->>> #return a empty string when encrypted words dont match to hash
->>> my_decrypted_shake128
-''
->>> my_decrypted_base64 = dec.text_decrypt(hash=b'WU9VUiBXT1JEIFRPIEhBU0g=', hash_method='BASE64')
->>> my_decrypted_base64
-'YOUR WORD TO HASH'
-```
+---
 
 > - Collecting Proxies and Check Their Health.
+>> Available Methods:
+>> - ##### HTTP, SOCKS4, SOCKS5
+>
+>> p.s : you can also use wrapper function without any argument(default protocol is "http" and default max_ping in 200)
 
 ```python
 
