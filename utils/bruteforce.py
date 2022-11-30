@@ -29,7 +29,7 @@ class BruteForcer:
             links = aspx_login
         elif ext == "js":
             links = js_login
-        elif ext == "/":
+        elif ext == "slash":
             links = slash_login
         elif ext == "cfm":
             links = cfm_login
@@ -48,7 +48,7 @@ class BruteForcer:
                 if proxy:
                     proxy = {"http": "http://" +
                              str(proxy), "https": "http://" + str(proxy)}
-                if proxies:
+                elif proxies:
                     random_proxy = random.choice(proxies)
                     proxy = {
                         "http": "http://" + str(random_proxy), "https": "http://" + str(random_proxy)}
@@ -81,8 +81,7 @@ class BruteForcer:
                         )
                 except Exception as e:
                     if len(founded) >= 1:
-                        result = {domain: founded}
-                        return result
+                        return founded
                     else:
                         return e
                 if r.status_code == 200:
@@ -91,5 +90,4 @@ class BruteForcer:
                     pass
             except KeyboardInterrupt:
                 break
-        result = {domain: founded}
-        return result
+        return founded

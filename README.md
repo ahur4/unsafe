@@ -37,10 +37,10 @@ False
 ---
 
 > - Collecting Proxies and Check Their Health.
->> Available Methods:
+>> Available Protocols:
 >> - ##### HTTP, SOCKS4, SOCKS5
 >
->> p.s : you can also use wrapper function without any argument(default protocol is "http" and default max_ping in 200)
+>> p.s : you can also use wrapper function without any argument(default protocol is "http" and default max_ping is 200)
 
 ```python
 
@@ -53,18 +53,25 @@ False
 >>> check_proxy
 True
 ```
+---
 
 > - Find Admin Panel.
-
+>> Available Extentions:
+>> - ##### php, html, asp, aspx, js, cfm, cgi, brf, slash
+>
+>> p.s : slash argument like : /admin - /login
+>>
+>> p.s : all arguments are optional except domain.
 ```python
 
 >>> from unsafe import BruteForcer
 >>> brute = BruteForcer()
->>> a = brute.admin_finder(domain='example.com', timeout=10, ext='php')
->>> a
-{'http://example.com': ['http://example.com/wp-login.php']}
+>>> founded_logins = brute.admin_finder(domain='example.com', timeout=10, ext='php', user_agent="AmigaVoyager/2.95 (compatible; MC680x0; AmigaOS; SV1)", proxy="http://127.0.0.1:80")
+>>> founded_logins
+['http://example.com/wp-login.php']
 
 ```
+---
 
 > - Find Wordpress Plugins and Extract Users.
 
