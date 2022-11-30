@@ -59,7 +59,7 @@ True
 >> Available Extentions:
 >> - ##### php, html, asp, aspx, js, cfm, cgi, brf, slash
 >
->> p.s : slash argument like : /admin - /login
+>> p.s : if use slash for ext argument, function start scanning with this type routes : /admin/ or /login/
 >>
 >> p.s : all arguments are optional except domain.
 ```python
