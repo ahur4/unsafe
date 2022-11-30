@@ -68,135 +68,135 @@ class Decrypter:
             if hash_method == 'md5':
                 if encode:
                     if str(encryptor.text_encrypt(word, encode, "MD5")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
                 else:
                     if str(encryptor.text_encrypt(words=word, hash_method="MD5")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
             elif hash_method == 'sha1':
                 if encode:
                     if str(encryptor.text_encrypt(word, encode, "SHA1")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
                 else:
                     if str(encryptor.text_encrypt(words=word, hash_method="SHA1")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
             elif hash_method == 'sha256':
                 if encode:
                     if str(encryptor.text_encrypt(word, encode, "SHA256")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
                 else:
                     if str(encryptor.text_encrypt(words=word, hash_method="SHA256")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
             elif hash_method == 'sha224':
                 if encode:
                     if str(encryptor.text_encrypt(word, encode, "SHA224")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
                 else:
                     if str(encryptor.text_encrypt(words=word, hash_method="SHA224")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
             elif hash_method == 'sha384':
                 if encode:
                     if str(encryptor.text_encrypt(word, encode, "SHA384")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
                 else:
                     if str(encryptor.text_encrypt(words=word, hash_method="SHA384")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
             elif hash_method == 'sha512':
                 if encode:
                     if str(encryptor.text_encrypt(word, encode, "SHA512")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
                 else:
                     if str(encryptor.text_encrypt(words=word, hash_method="SHA512")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
             elif hash_method == 'sha3-224':
                 if encode:
                     if str(encryptor.text_encrypt(word, encode, "SHA3-224")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
                 else:
                     if str(encryptor.text_encrypt(words=word, hash_method="SHA3-224")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
             elif hash_method == 'sha3-256':
                 if encode:
                     if str(encryptor.text_encrypt(word, encode, "SHA3-256")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
                 else:
                     if str(encryptor.text_encrypt(words=word, hash_method="SHA3-256")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
             elif hash_method == 'sha3-384':
                 if encode:
                     if str(encryptor.text_encrypt(word, encode, "SHA3-384")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
                 else:
                     if str(encryptor.text_encrypt(words=word, hash_method="SHA3-384")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
             elif hash_method == 'sha3-512':
                 if encode:
                     if str(encryptor.text_encrypt(word, encode, "SHA3-512")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
                 else:
                     if str(encryptor.text_encrypt(words=word, hash_method="SHA3-512")) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
             elif hash_method == 'shake128':
                 if encode:
                     if str(encryptor.text_encrypt(word, encode, "SHAKE128", count=str(count))) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
                 else:
                     if str(encryptor.text_encrypt(words=word, hash_method="SHAKE128", count=str(count))) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
             elif hash_method == 'shake256':
                 if encode:
                     if str(encryptor.text_encrypt(word, encode, "SHAKE256", count=str(count))) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
                 else:
                     if str(encryptor.text_encrypt(words=word, hash_method="SHAKE256", count=str(count))) == hash:
-                        return word
+                        return True
                     else:
-                        return ""
+                        return False
             elif hash_method == 'base85':
                 return base64.b85decode(hash)
             elif hash_method == 'base64':
