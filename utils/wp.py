@@ -105,82 +105,80 @@ class Wordpress:
             except Exception as e:
                 raise e
 
-    def plugin_scanner(self, url: str, timeout: int = 3, workers: int = 3, proxy: list | str = None):
-        if not self.wp_checker(url):
-            raise NotWordpress(url)
-        if 'http://' in url:
-            url = url.replace('http://', '')
-        elif 'https://' in url:
-            url = url.replace('https://', '')
+    def plugin_scanner(self, domain: str, timeout: int = 3, workers: int = 3, proxy: list | str = None):
+        if not self.wp_checker(domain):
+            raise NotWordpress(domain)
+        if 'http://' in domain:
+            domain = domain.replace('http://', '')
+        elif 'https://' in domain:
+            domain = domain.replace('https://', '')
         else:
-            url = url
+            domain = domain
 
         if workers == 1:
             t = threading.Thread(target=self.send_request, args=(
-                wp_plugins, url, timeout, proxy))
+                wp_plugins, domain, timeout, proxy))
             t.start()
             t.join()
         elif workers == 2:
             t = threading.Thread(target=self.send_request, args=(
-                wp_plugins[0:400], url, timeout, proxy))
+                wp_plugins[0:400], domain, timeout, proxy))
             t.start()
             t2 = threading.Thread(target=self.send_request, args=(
-                wp_plugins[400:799], url, timeout, proxy))
+                wp_plugins[400:], domain, timeout, proxy))
             t2.start()
             t2.join()
             t.join()
 
         elif workers == 3:
             t = threading.Thread(target=self.send_request, args=(
-                wp_plugins[0:266], url, timeout, proxy))
+                wp_plugins[0:266], domain, timeout, proxy))
             t.start()
             t2 = threading.Thread(target=self.send_request, args=(
-                wp_plugins[266:532], url, timeout, proxy))
+                wp_plugins[266:532], domain, timeout, proxy))
             t2.start()
             t3 = threading.Thread(target=self.send_request, args=(
-                wp_plugins[532:799], url, timeout, proxy))
+                wp_plugins[532:], domain, timeout, proxy))
             t3.start()
             t3.join()
             t.join()
 
         elif workers == 4:
             t = threading.Thread(target=self.send_request, args=(
-                wp_plugins[0:200], url, timeout, proxy))
+                wp_plugins[0:200], domain, timeout, proxy))
             t.start()
             t2 = threading.Thread(target=self.send_request, args=(
-                wp_plugins[200:400], url, timeout, proxy))
+                wp_plugins[200:400], domain, timeout, proxy))
             t2.start()
             t3 = threading.Thread(target=self.send_request, args=(
-                wp_plugins[400:600], url, timeout, proxy))
+                wp_plugins[400:600], domain, timeout, proxy))
             t3.start()
             t4 = threading.Thread(target=self.send_request, args=(
-                wp_plugins[600:799], url, timeout, proxy))
+                wp_plugins[600:], domain, timeout, proxy))
             t4.start()
             t4.join()
             t.join()
 
         elif workers == 5:
             t = threading.Thread(target=self.send_request, args=(
-                wp_plugins[0:160], url, timeout, proxy))
+                wp_plugins[0:160], domain, timeout, proxy))
             t.start()
             t2 = threading.Thread(target=self.send_request, args=(
-                wp_plugins[160:320], url, timeout, proxy))
+                wp_plugins[160:320], domain, timeout, proxy))
             t2.start()
             t3 = threading.Thread(target=self.send_request, args=(
-                wp_plugins[320:480], url, timeout, proxy))
+                wp_plugins[320:480], domain, timeout, proxy))
             t3.start()
             t4 = threading.Thread(target=self.send_request, args=(
-                wp_plugins[480:640], url, timeout, proxy))
+                wp_plugins[480:640], domain, timeout, proxy))
             t4.start()
             t5 = threading.Thread(target=self.send_request, args=(
-                wp_plugins[640:799], url, timeout, proxy))
+                wp_plugins[640:], domain, timeout, proxy))
             t5.start()
             t5.join()
             t.join()
+        else:
+            raise RuntimeError("workers count must be under 5.")
 
         global plugins_list
-        if plugins_list == []:
-            raise NotFoundData
-
-        else:
-            return plugins_list
+        return plugins_list

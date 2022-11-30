@@ -1283,7 +1283,6 @@ aspx_login = [
     '/administrator_login.aspx'
 ]
 
-
 asp_login = [
     '/account.asp',
     '/admin/account.asp',
@@ -1365,7 +1364,6 @@ asp_login = [
     '/ur-admin.asp'
 ]
 
-
 html_login = [
     '/admin/account.html',
     '/admin/index.html',
@@ -1437,7 +1435,7 @@ html_login = [
     '/ur-admin.html'
 ]
 
-
+print(len(html_login))
 js_login = [
     '/admin/account.js',
     '/admin/index.js',

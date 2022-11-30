@@ -1,14 +1,16 @@
 from unsafe.utils.strings import aspx_login, asp_login, php_login, html_login, cgi_login, brf_login, cfm_login, js_login, slash_login, ua
 import requests
 import random
+from threading import Thread
 
+founded = []
 
 class BruteForcer:
 
     def __init__(self) -> None:
         pass
-
-    def admin_finder(self, domain: str, timeout: int = 10, ext: str = "php", user_agent: str | None = None,
+    
+    def send_req_admin_finder(self, domain: str, timeout: int, links: list, user_agent: str | None = None,
               cookie: str | None = None, proxy: str | None = None, proxies: list | None = None):
 
         if "http://" in domain:
@@ -18,31 +20,7 @@ class BruteForcer:
         else:
             pass
         domain = "http://" + domain
-
-        links = []
-        ext = ext.strip().lower()
-        if ext == "php":
-            links = php_login
-        elif ext == "asp":
-            links = asp_login
-        elif ext == "aspx":
-            links = aspx_login
-        elif ext == "js":
-            links = js_login
-        elif ext == "slash":
-            links = slash_login
-        elif ext == "cfm":
-            links = cfm_login
-        elif ext == "cgi":
-            links = cgi_login
-        elif ext == "brf":
-            links = brf_login
-        elif ext == "html":
-            links = html_login
-        else:
-            raise ValueError("This ext(Argument) Not Allowed !")
-
-        founded = []
+        global founded
         for i in links:
             try:
                 if proxy:
@@ -91,3 +69,56 @@ class BruteForcer:
             except KeyboardInterrupt:
                 break
         return founded
+
+    def admin_finder(self, domain: str, workers: int = 3, timeout: int = 10, ext: str = "php", user_agent: str | None = None,
+              cookie: str | None = None, proxy: str | None = None, proxies: list | None = None):
+        links = []
+        ext = ext.strip().lower()
+        if ext == "php":
+            links = php_login
+        elif ext == "asp":
+            links = asp_login
+        elif ext == "aspx":
+            links = aspx_login
+        elif ext == "js":
+            links = js_login
+        elif ext == "slash":
+            links = slash_login
+        elif ext == "cfm":
+            links = cfm_login
+        elif ext == "cgi":
+            links = cgi_login
+        elif ext == "brf":
+            links = brf_login
+        elif ext == "html":
+            links = html_login
+        else:
+            raise ValueError("This ext(Argument) Not Allowed !")
+        if workers == 1:
+            t = Thread(target=self.send_req_admin_finder, args=(domain, timeout, links, user_agent, cookie, proxy, proxies))
+            t.start()
+            t.join()
+            return founded
+        elif workers == 2:
+            calcu_div = int(len(links) / workers)
+            links1 = links[:calcu_div]
+            links2 = links[calcu_div:]
+            t = Thread(target=self.send_req_admin_finder, args=(domain, timeout, links1, user_agent, cookie, proxy, proxies))
+            t.start()
+            t2 = Thread(target=self.send_req_admin_finder, args=(domain, timeout, links2, user_agent, cookie, proxy, proxies))
+            t2.start()
+            t2.join()
+            return founded
+        elif workers == 3:
+            calcu_div = int(len(links) / workers)
+            links1 = links[:calcu_div]
+            links2 = links[calcu_div:calcu_div*2]
+            links3 = links[calcu_div*2:]
+            t = Thread(target=self.send_req_admin_finder, args=(domain, timeout, links1, user_agent, cookie, proxy, proxies))
+            t.start()
+            t2 = Thread(target=self.send_req_admin_finder, args=(domain, timeout, links2, user_agent, cookie, proxy, proxies))
+            t2.start()
+            t3 = Thread(target=self.send_req_admin_finder, args=(domain, timeout, links3, user_agent, cookie, proxy, proxies))
+            t3.start()
+            t3.join()
+            return founded

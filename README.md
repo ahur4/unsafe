@@ -74,7 +74,7 @@ True
 ---
 
 > - Find Wordpress Plugins and Extract Users.
-
+>> p.s : all arguments are optional except domain
 ```python
 
 >>> from unsafe import Wordpress
@@ -84,7 +84,7 @@ True
 >>> users
 ['admin', 'administrator']
 >>> #max workers count is 5(for now) and default workers count is 3
->>> plugins = wp.plugin_scanner(url="example.com", timeout=5, workers=5, proxy="http://127.0.0.1:80")
+>>> plugins = wp.plugin_scanner(domain="example.com", timeout=5, workers=5, proxy="http://127.0.0.1:80")
 >>> plugins
 ['http://example.com/wp-content/plugins/wordpress-seo/', 'http://example.com/wp-content/plugins/duplicate-post/', 'http://example.com/wp-content/plugins/w3-total-cache/', 'http://example.com/wp-content/plugins/redirection/', 'http://example.com/wp-content/plugins/favicon-by-realfavicongenerator/']
 
