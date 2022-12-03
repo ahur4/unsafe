@@ -12,9 +12,9 @@
 >> - BASE16, BASE32, BASE64, BASE64, BASE85, ASCII85, CAESAR
 >
 >> p.s : for shake methods(128, 256) and caesar method you must use count parameter in calling function.
-
+>>
 >> p.s : in encryption and decryption all arguments are optional except words(in encrypt) and hash(in decrypt).
-
+>>
 >> p.s : for default wordlist there is John The Ripper's tool wordlist.
 
 ```python
@@ -60,6 +60,7 @@ True
 >> - php, html, asp, aspx, js, cfm, cgi, brf, slash
 >
 >> p.s : if use slash for ext argument, function start scanning with this type routes : /admin/ or /login/
+>>
 >> p.s : all arguments are optional except domain.
 ```python
 
