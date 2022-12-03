@@ -8,13 +8,11 @@
 
 > - Hashing, Encrypting and Hash Cracking or Text Decryption
 >> Available Mathods :
->> - ##### MD5, SHA1, SHA224, SHA256, SHA384, SHA512, SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, SHAKE256
->> - ##### BASE16, BASE32, BASE64, BASE64, BASE85, ASCII85, CAESAR
+>> - MD5, SHA1, SHA224, SHA256, SHA384, SHA512, SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, SHAKE256
+>> - BASE16, BASE32, BASE64, BASE64, BASE85, ASCII85, CAESAR
 >
 >> p.s : for shake methods(128, 256) and caesar method you must use count parameter in calling function.
->>
 >> p.s : in encryption and decryption all arguments are optional except words(in encrypt) and hash(in decrypt).
->>
 >> p.s : for default wordlist there is John The Ripper's tool wordlist.
 
 ```python
@@ -38,7 +36,7 @@ False
 
 > - Collecting Proxies and Check Their Health.
 >> Available Protocols:
->> - ##### HTTP, SOCKS4, SOCKS5
+>> - HTTP, SOCKS4, SOCKS5
 >
 >> p.s : you can also use wrapper function without any argument(default protocol is "http" and default max_ping is 200)
 
@@ -57,10 +55,9 @@ True
 
 > - Find Admin Panel.
 >> Available Extentions:
->> - ##### php, html, asp, aspx, js, cfm, cgi, brf, slash
+>> - php, html, asp, aspx, js, cfm, cgi, brf, slash
 >
 >> p.s : if use slash for ext argument, function start scanning with this type routes : /admin/ or /login/
->>
 >> p.s : all arguments are optional except domain.
 ```python
 
