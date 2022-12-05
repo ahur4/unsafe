@@ -39,7 +39,7 @@ class ExifImage:
         except:
             return False
 
-    def edit_exif_image(path: Path, key: str, value: str):
+    def edit_exif_image(self, path: Path, key: str, value: str):
         if not os.path.isfile(path):
             raise ValueError("Your entered path not exists or not image.")
         with open(path, 'rb') as image_file:

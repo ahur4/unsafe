@@ -4,16 +4,14 @@ import random
 from threading import Thread
 from queue import Queue
 
-admin_finder_queue = Queue()
-file_manager_queue = Queue()
-admin_finder_founded = []
-file_manager_founded = []
-
 
 class BruteForcer:
 
     def __init__(self) -> None:
-        pass
+        self.admin_finder_queue = Queue()
+        self.file_manager_queue = Queue()
+        self.admin_finder_founded = []
+        self.file_manager_founded = []
 
     def send_req_admin_finder(self, domain: str, timeout: int, links_queue, user_agent: str | None = None,
                               cookie: str | None = None, proxy: str | None = None, proxies: list | None = None):
@@ -25,7 +23,6 @@ class BruteForcer:
         else:
             pass
         domain = "http://" + domain
-        global admin_finder_founded
         while not links_queue.empty():
             i = links_queue.get()
             try:
@@ -64,26 +61,25 @@ class BruteForcer:
                             verify=False,
                         )
                 except Exception as e:
-                    if len(admin_finder_founded) >= 1:
-                        return admin_finder_founded
+                    if len(self.admin_finder_founded) >= 1:
+                        return self.admin_finder_founded
                     else:
                         return []
                 links_queue.task_done()
                 if r.status_code == 200:
-                    admin_finder_founded.append(full_link)
+                    self.admin_finder_founded.append(full_link)
                 else:
                     pass
             except KeyboardInterrupt:
                 break
 
-        return admin_finder_founded
+        return self.admin_finder_founded
 
     def admin_finder(self, domain: str, workers: int = 3, timeout: int = 10, ext: str = "php", user_agent: str | None = None,
                      cookie: str | None = None, proxy: str | None = None, proxies: list | None = None):
-        global admin_finder_queue
-        global admin_finder_founded
         threads = []
         links = []
+        self.admin_finder_founded.clear()
         ext = ext.strip().lower()
         if ext == "php":
             links = php_login
@@ -106,16 +102,16 @@ class BruteForcer:
         else:
             raise ValueError("This ext(Argument) Not Allowed !")
         for i in links:
-            admin_finder_queue.put(i)
+            self.admin_finder_queue.put(i)
         for i in range(workers):
             thread_ = Thread(target=self.send_req_admin_finder, args=(
-                domain, timeout, admin_finder_queue, user_agent, cookie, proxy, proxies))
+                domain, timeout, self.admin_finder_queue, user_agent, cookie, proxy, proxies))
             thread_.setDaemon(True)
             thread_.start()
             threads.append(thread_)
         for i in threads:
             i.join()
-        return admin_finder_founded
+        return self.admin_finder_founded
 
     def send_req_file_manager(self, domain: str, timeout: int, links_queue, user_agent: str | None = None,
                               cookie: str | None = None, proxy: str | None = None, proxies: list | None = None):
@@ -166,37 +162,33 @@ class BruteForcer:
                             verify=True,
                         )
                 except Exception as e:
-                    if len(file_manager_founded) >= 1:
-                        return file_manager_founded
+                    if len(self.file_manager_founded) >= 1:
+                        return self.file_manager_founded
                     else:
                         return []
                 links_queue.task_done()
-                print(r.status_code)
                 if r.status_code == 200:
-                    print(r.url)
-                    file_manager_founded.append(f"{r.url}")
-                    print(file_manager_founded)
+                    self.file_manager_founded.append(f"{r.url}")
                 else:
                     pass
             except KeyboardInterrupt:
                 break
 
-        return file_manager_founded
+        return self.file_manager_founded
 
     def filemanager_finder(self, domain: str, workers: int = 5, timeout: int = 5, user_agent: str | None = None,
                            cookie: str | None = None, proxy: str | None = None, proxies: list | None = None):
-        global file_manager_queue
         threads = []
+        self.file_manager_founded.clear()
         for i in manager:
-            file_manager_queue.put(i)
+            self.file_manager_queue.put(i)
         for i in range(workers):
             thread_ = Thread(target=self.send_req_file_manager, args=(
-                domain, timeout, file_manager_queue, user_agent, cookie, proxy, proxies))
+                domain, timeout, self.file_manager_queue, user_agent, cookie, proxy, proxies))
             thread_.setDaemon(True)
             thread_.start()
             threads.append(thread_)
         for i in threads:
             i.join()
-        response = file_manager_founded
-        file_manager_founded.clear()
-        return response
+
+        return self.file_manager_founded

@@ -89,3 +89,29 @@ True
 ['http://example.com/wp-content/plugins/wordpress-seo/', 'http://example.com/wp-content/plugins/duplicate-post/', 'http://example.com/wp-content/plugins/w3-total-cache/', 'http://example.com/wp-content/plugins/redirection/', 'http://example.com/wp-content/plugins/favicon-by-realfavicongenerator/']
 
 ```
+---
+
+> - Find FileManager of Site.
+```python
+
+>>> from unsafe import BruteForcer
+>>> a = BruteForcer()
+>>> print(a.filemanager_finder("admin.ys2y.com", timeout=10))
+['https://admin.ys2y.com/filemanager/', 'https://admin.ys2y.com/filemanager/index.php']
+```
+---
+> - Show, Delete and Edit Exif Metadata of Image.
+```python
+>>> from unsafe import ExifImage
+>>>
+>>> exif = ExifImage()
+>>> 
+>>> 
+>>> exif.delete_exif_img('/path/of/file.jpg')
+True
+>>> exif.edit_exif_image('/path/of/file.jpg',key='model', value='unsafe')
+True
+>>> exif.extract_exif_img('/path/of/file.jpg')
+{"make": "huawie", "model": "G-750", ...}
+```
+---
