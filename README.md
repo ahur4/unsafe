@@ -96,8 +96,8 @@ True
 
 >>> from unsafe import BruteForcer
 >>> a = BruteForcer()
->>> print(a.filemanager_finder("admin.ys2y.com", timeout=10))
-['https://admin.ys2y.com/filemanager/', 'https://admin.ys2y.com/filemanager/index.php']
+>>> print(a.filemanager_finder("example.com", timeout=10))
+['https://example.com/filemanager/', 'https://example.com/filemanager/index.php']
 ```
 ---
 > - Show, Delete and Edit Exif Metadata of Image.
