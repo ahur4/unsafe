@@ -112,6 +112,6 @@ True
 >>> exif.edit_exif_image('/path/of/file.jpg',key='model', value='unsafe')
 True
 >>> exif.extract_exif_img('/path/of/file.jpg')
-{"make": "huawie", "model": "G-750", ...}
+{"make": "huawei", "model": "G-750", ...}
 ```
 ---
