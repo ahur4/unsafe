@@ -3,6 +3,7 @@ from unsafe.utils.decrypt import Decrypter
 from unsafe.utils.proxy import Proxy
 from unsafe.utils.bruteforce import BruteForcer
 from unsafe.utils.wp import Wordpress
+from unsafe.utils.exifdata import ExifImage
 from unsafe.utils.strings import (
     wordlist,
     ua,
@@ -15,5 +16,11 @@ from unsafe.utils.strings import (
     cfm_login,
     js_login,
     slash_login
-)
-from unsafe.exceptions import UnknownEncoding, NotWordpress, SiteNotFound, UsersFileNotFound, NotFoundData
+    )
+from unsafe.exceptions import (
+    UnknownEncoding,
+    NotWordpress,
+    SiteNotFound,
+    UsersFileNotFound,
+    NotFoundData
+    )

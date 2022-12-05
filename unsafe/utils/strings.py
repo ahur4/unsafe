@@ -1435,7 +1435,6 @@ html_login = [
     '/ur-admin.html'
 ]
 
-print(len(html_login))
 js_login = [
     '/admin/account.js',
     '/admin/index.js',
