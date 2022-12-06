@@ -95,8 +95,8 @@ True
 ```python
 
 >>> from unsafe import BruteForcer
->>> a = BruteForcer()
->>> print(a.filemanager_finder("example.com", timeout=10))
+>>> brute = BruteForcer()
+>>> print(brute.filemanager_finder("example.com", timeout=10))
 ['https://example.com/filemanager/', 'https://example.com/filemanager/index.php']
 ```
 ---
@@ -105,7 +105,6 @@ True
 >>> from unsafe import ExifImage
 >>>
 >>> exif = ExifImage()
->>> 
 >>> 
 >>> exif.delete_exif_img('/path/of/file.jpg')
 True

@@ -1,14 +1,12 @@
 from setuptools import find_packages, setup
 
-long_description = open('README.md', 'r').read()
-# requirements = open('./unsafe/requirements.txt', 'r').read()
+long_description = open('./unsafe/README.md', 'r').read()
 
 requirements = [
     'requests<3.0,>=2.25.1',
     'PySocks==1.7.1',
     'typing==3.10.0.0',
     'beautifulsoup4==4.11.1',
-    'exif==1.4.0'
 ]
 
 setup(
