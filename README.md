@@ -71,6 +71,25 @@ True
 ['http://example.com/wp-login.php']
 
 ```
+
+> - Find FileManager of Site.
+```python
+
+>>> from unsafe import BruteForcer
+>>> brute = BruteForcer()
+>>> print(brute.filemanager_finder("example.com", timeout=10))
+['https://example.com/filemanager/', 'https://example.com/filemanager/index.php']
+```
+
+> - CloudFlare Bypassing.
+>> p.s : default "workers" is 5.
+```python
+
+>>> from unsafe import BruteForcer
+>>> brute = BruteForcer()
+>>> print(brute.cloudflare_bypasser("google.com", workers=10))
+{'ns4.google.com': '216.239.38.10', 'search.google.com': '142.251.39.14', 'dns.google.com': '74.91.29.203', 'chat.google.com': '50.7.132.142', 'sites.google.com': '74.91.29.204', 'ads.google.com': '208.110.86.66', 'wap.google.com': '142.251.39.14'}
+```
 ---
 
 > - Find Wordpress Plugins and Extract Users.
@@ -91,15 +110,6 @@ True
 ```
 ---
 
-> - Find FileManager of Site.
-```python
-
->>> from unsafe import BruteForcer
->>> brute = BruteForcer()
->>> print(brute.filemanager_finder("example.com", timeout=10))
-['https://example.com/filemanager/', 'https://example.com/filemanager/index.php']
-```
----
 > - Show, Delete and Edit Exif Metadata of Image.
 ```python
 >>> from unsafe import ExifImage

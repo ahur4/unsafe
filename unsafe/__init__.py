@@ -15,7 +15,8 @@ from unsafe.utils.strings import (
     brf_login,
     cfm_login,
     js_login,
-    slash_login
+    slash_login,
+    subdomain
     )
 from unsafe.exceptions import (
     UnknownEncoding,

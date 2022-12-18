@@ -1,17 +1,16 @@
 from setuptools import find_packages, setup
 
-long_description = open('./unsafe/README.md', 'r').read()
+long_description = open('README.md', 'r').read()
 
 requirements = [
     'requests<3.0,>=2.25.1',
     'PySocks==1.7.1',
-    'typing==3.10.0.0',
     'beautifulsoup4==4.11.1',
 ]
 
 setup(
     name='unsafe',
-    version='1.1.33',
+    version='1.1.35',
     author='Ahura Rahmani',
     author_email='ahur4.rahmani@gmail.com',
     maintainer='Masoud Nayebi',
@@ -29,7 +28,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     packages=find_packages(),
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     include_package_data=True,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
