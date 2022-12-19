@@ -40,7 +40,7 @@ class Wordpress:
             return True
         return True
 
-    def get_user(self, domain: str):
+    def wp_get_users(self, domain: str):
         try:
             if 'http://' in domain:
                 domain = domain.replace('http://', '')

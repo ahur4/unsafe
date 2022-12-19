@@ -15,7 +15,7 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
         sha3-384 | sha3-512 | shake128 | shake256 | base16 | base32 | base64 \
         base85 | ascii85 | caesar )
 
-    - **Encryption** :
+    - **Encryption Usage** :
     ```python
         from unsafe import Unsafe
         unsafe = Unsafe()
@@ -35,7 +35,7 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
         print(shake128_name) #Output : ''c8a3ab8ca74720d227550f4f76b71f''
     
     ```
-    - **Decryption** :
+    - **Decryption Usage** :
     ```python
         from unsafe import Unsafe
         unsafe = Unsafe()
@@ -51,3 +51,122 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
 
     ```
 ---
+- **Collecting Proxies and Check Their Health.**
+    - **Available Protocols** :
+
+        (http | socks4 | socks5)
+    - **Proxy Wrapper Usage**
+    ```python
+        from unsafe import Unsafe
+        unsafe = Unsafe()
+
+        proxies = unsafe.proxy_wrapper(protocol="http", max_ping=200)
+        print(proxies) # Output : {'ip':'port', 'ip':'port', ...}
+    ```
+    - **Proxy Checker Usage**
+    ```python
+        from unsafe import Unsafe
+        unsafe = Unsafe()
+
+        isActive = unsafe.proxy_checker(proxy_host='127.0.0.1', proxy_port='80', protocol='http', timeout=10)
+        print(isActive) # Output : True|False
+    ```
+---
+- **BruteForcing Part for Find Admin Panel or FileManager or ...**
+    - **AdminFinder Usage**
+    ```python
+        from unsafe import Unsafe
+        unsafe = Unsafe()
+
+        admin_panels = unsafe.admin_finder(domain='example.com',
+                                           workers=5, #Threads
+                                           timeout=10,
+                                           ext='php', #Site type
+                                           user_agent="AmigaVoyager/2.95 (compatible; MC680x0; AmigaOS; SV1)",
+                                           proxy="http://127.0.0.1:80"
+                                        )
+        print(admin_panels) # Output : ['http://example.com/wp-login.php']
+    ```
+    - **FileManager Finder Usage**
+    ```python
+        from unsafe import Unsafe
+        unsafe = Unsafe()
+
+        filemanagers = unsafe.filemanager_finder(domain='example.com',
+                                           workers=5, #Threads
+                                           timeout=10,
+                                           user_agent="AmigaVoyager/2.95 (compatible; MC680x0; AmigaOS; SV1)",
+                                           proxy="http://127.0.0.1:80"
+                                        )
+        print(filemanagers) # Output : ['https://example.com/filemanager/', 'https://example.com/filemanager/index.php']
+    ```
+    - **CloudFlare Bypassing Usage**
+    ```python
+        from unsafe import Unsafe
+        unsafe = Unsafe()
+
+        realip = unsafe.cloudflare_bypasser(domain='google.com',
+                                           workers=5, #Threads
+                                        )
+        print(realip) # Output : {'ns4.google.com': '216.239.38.10', 'search.google.com': '142.251.39.14', ....}
+    ```
+---
+- **Show, Delete and Edit Exif Metadata of Image.**
+    - **Delete Metadata Usage**
+    ```python
+        from unsafe import Unsafe
+        unsafe = Unsafe()
+
+        isDeleted = unsafe.delete_exif_img('/path/of/file.jpg')
+        print(isDeleted) # Output : True|False
+    ```
+    - **Edit Metadata Usage**
+    ```python
+        from unsafe import Unsafe
+        unsafe = Unsafe()
+
+        isEdited = unsafe.edit_exif_img('/path/of/file.jpg',key='model', value='unsafe')
+        print(isEdited) # Output : True|False
+    ```
+    - **Extract Metadata Usage**
+    ```python
+        from unsafe import Unsafe
+        unsafe = Unsafe()
+
+        Exifed = unsafe.extract_exif_img('/path/of/file.jpg')
+        print(Exifed) # Output : {"make": "huawei", "model": "G-750", ...}
+    ```
+---
+- **All the operations that can be done on WordPress are placed in this section.**
+    - **Extract Admin Users**
+    ```python
+        from unsafe import Unsafe
+        unsafe = Unsafe()
+
+        site_users = unsafe.wp_get_users(domain="wordpress.org")
+        print(site_users) # Output : ['admin', 'administrator']
+    ```
+    - **Plugin Scanner**
+    ```python
+        from unsafe import Unsafe
+        unsafe = Unsafe()
+
+        site_users = unsafe.wp_plugin_scanner(domain="wordpress.org",
+                                              timeout=10,
+                                              workers=5,
+                                              proxy="http://127.0.0.1:80"
+                                            )
+        print(site_users) # Output : ['http://wordpress.org/wp-content/plugins/wordpress-seo/',....]
+    ``‍‍`‍‍
+---
+- **Measures to Remain Anonymous**
+    - **Detect and Cover Faces**
+    ```python
+        from unsafe import Unsafe
+        unsafe = Unsafe()
+
+        result_path = unsafe.anon_picture(image_path="path/of/image.jpg")
+        print(result_path) # Output : 'anon_picture_cache/UPW5X51.jpg'
+    ```
+---
+# New Features : Coming Soon...
