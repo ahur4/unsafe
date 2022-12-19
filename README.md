@@ -6,6 +6,13 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
 - Author : Ahur4
 - Maintainer : MesutFD
 
+# Features
+- [x] [Encrypt and Decrypt Hashs and Encodes](https://github.com/ahur4/unsafe#encrypt-and-decrypt-hashs-and-encodes)
+- [x] [Collecting Proxies and Check Their Health](https://github.com/ahur4/unsafe#collecting-proxies-and-check-their-health)
+- [x] [BruteForcing Part for Find Admin Panel or FileManager or ...](https://github.com/ahur4/unsafe#bruteforcing-part-for-find-admin-panel-or-filemanager-or-)
+- [x] [Show, Delete and Edit Exif Metadata of Image](https://github.com/ahur4/unsafe#show-delete-and-edit-exif-metadata-of-image)
+- [x] [All the operations that can be done on WordPress are placed in this section](https://github.com/ahur4/unsafe#all-the-operations-that-can-be-done-on-wordpress-are-placed-in-this-section)
+- [x] [Measures to Remain Anonymous](https://github.com/ahur4/unsafe#measures-to-remain-anonymous)
 
 # Usage
 - #### Encrypt and Decrypt Hashs and Encodes
