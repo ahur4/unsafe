@@ -25,3 +25,4 @@ from unsafe.exceptions import (
     UsersFileNotFound,
     NotFoundData
     )
+from unsafe.utils.anonymous import Anonymous

@@ -77,7 +77,7 @@ True
 
 >>> from unsafe import BruteForcer
 >>> brute = BruteForcer()
->>> print(brute.filemanager_finder("example.com", timeout=10))
+>>> brute.filemanager_finder("example.com", timeout=10)
 ['https://example.com/filemanager/', 'https://example.com/filemanager/index.php']
 ```
 
@@ -87,7 +87,7 @@ True
 
 >>> from unsafe import BruteForcer
 >>> brute = BruteForcer()
->>> print(brute.cloudflare_bypasser("google.com", workers=10))
+>>> brute.cloudflare_bypasser("google.com", workers=10)
 {'ns4.google.com': '216.239.38.10', 'search.google.com': '142.251.39.14', 'dns.google.com': '74.91.29.203', 'chat.google.com': '50.7.132.142', 'sites.google.com': '74.91.29.204', 'ads.google.com': '208.110.86.66', 'wap.google.com': '142.251.39.14'}
 ```
 ---
@@ -122,5 +122,17 @@ True
 True
 >>> exif.extract_exif_img('/path/of/file.jpg')
 {"make": "huawei", "model": "G-750", ...}
+```
+---
+
+> - Detect and Cover Faces for Security
+>
+>> p.s : also you can use your dataset for detect faces in "casc_path" argument(Optional)
+```python
+>>> from unsafe import Anonymous
+>>> a = Anonymous()
+>>>
+>>> a.anon_picture('path/of/picture.jpg')
+"anon_picture_cache/QJA76FH.jpg"
 ```
 ---
