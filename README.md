@@ -8,7 +8,7 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
 
 
 # Usage
-- **Encrypt and Decrypt Hashs and Encodes**
+- #### Encrypt and Decrypt Hashs and Encodes
     - **Available Methods:**
 
         ( md5 | sha1 | sha224 | sha256 | sha384 | sha512 | sha3-224 | sha3-256 \
