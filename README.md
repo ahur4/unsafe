@@ -51,7 +51,7 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
 
     ```
 ---
-- **Collecting Proxies and Check Their Health.**
+- #### Collecting Proxies and Check Their Health.
     - **Available Protocols** :
 
         (http | socks4 | socks5)
@@ -72,7 +72,7 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
         print(isActive) # Output : True|False
     ```
 ---
-- **BruteForcing Part for Find Admin Panel or FileManager or ...**
+- #### BruteForcing Part for Find Admin Panel or FileManager or ...
     - **AdminFinder Usage**
     ```python
         from unsafe import Unsafe
@@ -111,7 +111,7 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
         print(realip) # Output : {'ns4.google.com': '216.239.38.10', 'search.google.com': '142.251.39.14', ....}
     ```
 ---
-- **Show, Delete and Edit Exif Metadata of Image.**
+- #### Show, Delete and Edit Exif Metadata of Image.
     - **Delete Metadata Usage**
     ```python
         from unsafe import Unsafe
@@ -137,7 +137,7 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
         print(Exifed) # Output : {"make": "huawei", "model": "G-750", ...}
     ```
 ---
-- **All the operations that can be done on WordPress are placed in this section.**
+- #### All the operations that can be done on WordPress are placed in this section.
     - **Extract Admin Users**
     ```python
         from unsafe import Unsafe
@@ -159,7 +159,7 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
         print(site_users) # Output : ['http://wordpress.org/wp-content/plugins/wordpress-seo/',....]
     ``‍‍`‍‍
 ---
-- **Measures to Remain Anonymous**
+- #### Measures to Remain Anonymous
     - **Detect and Cover Faces**
     ```python
         from unsafe import Unsafe
