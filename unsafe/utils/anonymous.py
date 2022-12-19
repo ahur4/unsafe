@@ -1,17 +1,21 @@
 import cv2
 from pathlib import Path
 import os
-import random, string
+import random
+import string
+
 
 class Anonymous:
     def __init__(self):
         pass
-    
+
     def _string_generator(self, size=7, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
 
-    
-    def anon_picture(self, image_path: Path, casc_path: Path = 'unsafe/utils/datasets/front_face_detect.xml'):
+    def anon_picture(self, image_path: Path, casc_path: Path = 'unsafe/utils/datasets/front_sideview_face_detect.xml'):
+        """
+        Detect And Cover Faces for Anonymously.
+        """
         if not os.path.exists('./anon_picture_cache'):
             os.mkdir('./anon_picture_cache')
         face_cascade = cv2.CascadeClassifier(casc_path)
@@ -30,6 +34,4 @@ class Anonymous:
         return file_path
 
 # a = Anonymous()
-# print(a.anon_picture('unsafe/utils/images/test_face.jpg'))
-
-
+# print(a.anon_picture('unsafe/utils/testt.jpg'))

@@ -3,6 +3,7 @@ from pathlib import Path
 import os
 from exif import Image
 
+
 class ExifImage:
     def __init__(self) -> None:
         pass
@@ -32,7 +33,7 @@ class ExifImage:
                 image = Image(image_file)
 
             image.delete_all()
-        
+
             with open(path, 'wb') as new_image_file:
                 new_image_file.write(image.get_file())
             return True
@@ -47,8 +48,8 @@ class ExifImage:
         try:
             image = Image(image)
             image[f"{key}"] = value
-            with open(path , 'wb') as new:
+            with open(path, 'wb') as new:
                 new.write(image.get_file())
             return True
         except Exception as e:
-            return False        
+            return False

@@ -12,7 +12,7 @@ class Proxy:
     def __init__(self) -> None:
         pass
 
-    def wrapper(self, protocol: str = "http", max_ping: int = 200) -> dict:
+    def proxy_wrapper(self, protocol: str = "http", max_ping: int = 200) -> dict:
         """
         ### This Method Crawl a Site For Get Proxie's
 
@@ -60,7 +60,7 @@ class Proxy:
         else:
             raise ValueError("This Protocol Not Exists.")
 
-    def checker(self, proxy_host: str, proxy_port: str, protocol: str = "http", timeout: int = 2) -> bool:
+    def proxy_checker(self, proxy_host: str, proxy_port: str, protocol: str = "http", timeout: int = 2) -> bool:
         """
         ### This Function is to Check if The Proxy is Dead or Not.
 

@@ -18,7 +18,7 @@ class Wordpress:
     def __init__(self):
         pass
 
-    def wp_checker(self, domain: str):
+    def _wp_checker(self, domain: str):
         if 'http://' in domain:
             domain = domain.replace('http://', '')
         elif 'https://' in domain:
@@ -48,7 +48,7 @@ class Wordpress:
                 domain = domain.replace('https://', '')
             else:
                 domain = domain
-            if not self.wp_checker(domain):
+            if not self._wp_checker(domain):
                 raise NotWordpress(domain)
         except:
             pass
@@ -79,7 +79,7 @@ class Wordpress:
         except Exception as e:
             raise e
 
-    def send_request(self, plugins: list, url: str, timeout: int, proxy: list | str = None):
+    def _send_request(self, plugins: list, url: str, timeout: int, proxy: list | str = None):
         global plugins_list
         global counter
 
@@ -108,8 +108,8 @@ class Wordpress:
             except Exception as e:
                 raise e
 
-    def plugin_scanner(self, domain: str, timeout: int = 3, workers: int = 3, proxy: list | str = None):
-        if not self.wp_checker(domain):
+    def wp_plugin_scanner(self, domain: str, timeout: int = 3, workers: int = 3, proxy: list | str = None):
+        if not self._wp_checker(domain):
             raise NotWordpress(domain)
 
         global queue
@@ -125,7 +125,7 @@ class Wordpress:
         else:
             domain = domain
         for i in range(workers):
-            thread_ = threading.Thread(target=self.send_request, args=(
+            thread_ = threading.Thread(target=self._send_request, args=(
                 wp_plugins, domain, timeout, proxy))
             thread_.setDaemon(True)
             thread_.start()

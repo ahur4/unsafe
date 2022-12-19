@@ -1,138 +1,53 @@
-# unsafe
+![PyPI](https://img.shields.io/pypi/v/unsafe)
+# Unsafe (Advanced Pentesting Module)
+An Advanced Module for Penetration Testing.
+Using This Module, You Can Implement Brute Force Operations and Identification and Anonymity.
+This Module is Always Being Developed and There is No Need to Worry About it Becoming Unavailable.
+- Author : Ahur4
+- Maintainer : MesutFD
 
-> A practical and optimal library for those interested in Pentest, cryptography,Vulnerability Scanner and ..!
-> 
-> Developed by Ahur4, MesutFD (™) 2022
 
-## Examples of How To Use.
+# Usage
+- **Encrypt and Decrypt Hashs and Encodes**
+    - **Available Methods:**
 
-> - Hashing, Encrypting and Hash Cracking or Text Decryption
->> Available Mathods :
->> - MD5, SHA1, SHA224, SHA256, SHA384, SHA512, SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128, SHAKE256
->> - BASE16, BASE32, BASE64, BASE64, BASE85, ASCII85, CAESAR
->
->> p.s : for shake methods(128, 256) and caesar method you must use count parameter in calling function.
->>
->> p.s : in encryption and decryption all arguments are optional except words(in encrypt) and hash(in decrypt).
->>
->> p.s : for default wordlist there is John The Ripper's tool wordlist.
+        ( md5 | sha1 | sha224 | sha256 | sha384 | sha512 | sha3-224 | sha3-256 \
+        sha3-384 | sha3-512 | shake128 | shake256 | base16 | base32 | base64 \
+        base85 | ascii85 | caesar )
 
-```python
->>> from unsafe import Encryptor, Decrypter
->>> dec = Decrypter()
->>> enc = Encryptor()
->>> my_md5 = enc.text_encrypt(words='unsafe', encode='UTF-8', hash_method='MD5')
->>> my_md5
-'64c823fad1d87e0df1ef3cdeb8ac684f'
->>> my_decrypted_md5 = dec.text_decrypt(hash='64c823fad1d87e0df1ef3cdeb8ac684f', word='unsafe', hash_method='MD5')
->>> my_decrypted_md5
-True
->>> my_decrypted_md5 = dec.text_decrypt(hash='64c823fad1d87e0df1ef3cdeb8ac684f', word='ahur4', hash_method='MD5')
->>> my_decrypted_md5
-False
->>> my_decrypted_md5 = dec.text_decrypt(hash='64c823fad1d87e0df1ef3cdeb8ac684f', word=['ahur4', 'unsafe', 'mesut'], hash_method='MD5')
->>> my_decrypted_md5
-'unsafe'
-```
----
+    - **Encryption** :
+    ```python
+        from unsafe import Unsafe
+        unsafe = Unsafe()
+    
+        name = "Ahur4"
+    
+        md5_name = unsafe.text_encrypt(name) #Default hash_method is "md5"
+        print(md5_name) #Output : 'ada3e80e34da70c99c1acff7f492993c'
+    
+        base64_name = unsafe.text_encrypt(name, hash_method="base64")
+        print(base64_name) #Output : b'QWh1cjQ='
+    
+        caesar_name = unsafe.text_encrypt(name, hash_method="caesar", count=5)
+        print(caesar_name) #Output : 'Fmzw4'
+    
+        shake128_name = unsafe.text_encrypt(name, encode='UTF-8', hash_method="shake128", count=15)
+        print(shake128_name) #Output : ''c8a3ab8ca74720d227550f4f76b71f''
+    
+    ```
+    - **Decryption** :
+    ```python
+        from unsafe import Unsafe
+        unsafe = Unsafe()
 
-> - Collecting Proxies and Check Their Health.
->> Available Protocols:
->> - HTTP, SOCKS4, SOCKS5
->
->> p.s : you can also use wrapper function without any argument(default protocol is "http" and default max_ping is 200)
+        hash = "ada3e80e34da70c99c1acff7f492993c" #Md5 - Value : Ahur4
 
-```python
+        name = unsafe.text_decrypt(hash=hash, word="Ahur4") #Default hash_method is "md5"
+        print(name) #Output : True
 
->>> from unsafe import Proxy
->>> proxy = Proxy()
->>> my_proxy_dict = proxy.wrapper(protocol='http', max_ping=200)
->>> my_proxy_dict
-{'ip':'port', 'ip':'port', ...}
->>> check_proxy = proxy.checker(proxy_host='127.0.0.1', proxy_port='80', protocol='http', timeout=10)
->>> check_proxy
-True
-```
----
+        # When Do Not Have any Word or Wordlist Default Wordlist is John The Ripper Wordlist
+        name = unsafe.text_decrypt(hash=hash, hash_method="sha1")
+        print(name) #Output : '' ,Cause Not Found Result.
 
-> - Find Admin Panel.
->> Available Extentions:
->> - php, html, asp, aspx, js, cfm, cgi, brf, slash
->
->> p.s : if use slash for ext argument, function start scanning with this type routes : /admin/ or /login/
->>
->> p.s : all arguments are optional except domain.
-```python
-
->>> from unsafe import BruteForcer
->>> brute = BruteForcer()
->>> founded_logins = brute.admin_finder(domain='example.com', timeout=10, ext='php', user_agent="AmigaVoyager/2.95 (compatible; MC680x0; AmigaOS; SV1)", proxy="http://127.0.0.1:80")
->>> founded_logins
-['http://example.com/wp-login.php']
-
-```
-
-> - Find FileManager of Site.
-```python
-
->>> from unsafe import BruteForcer
->>> brute = BruteForcer()
->>> brute.filemanager_finder("example.com", timeout=10)
-['https://example.com/filemanager/', 'https://example.com/filemanager/index.php']
-```
-
-> - CloudFlare Bypassing.
->> p.s : default "workers" is 5.
-```python
-
->>> from unsafe import BruteForcer
->>> brute = BruteForcer()
->>> brute.cloudflare_bypasser("google.com", workers=10)
-{'ns4.google.com': '216.239.38.10', 'search.google.com': '142.251.39.14', 'dns.google.com': '74.91.29.203', 'chat.google.com': '50.7.132.142', 'sites.google.com': '74.91.29.204', 'ads.google.com': '208.110.86.66', 'wap.google.com': '142.251.39.14'}
-```
----
-
-> - Find Wordpress Plugins and Extract Users.
->> p.s : all arguments are optional except domain
-```python
-
->>> from unsafe import Wordpress
->>> wp = Wordpress()
->>> #get wordpress users
->>> users = wp.get_user(domain='example.com')
->>> users
-['admin', 'administrator']
->>> #max workers count is 5(for now) and default workers count is 3
->>> plugins = wp.plugin_scanner(domain="example.com", timeout=5, workers=5, proxy="http://127.0.0.1:80")
->>> plugins
-['http://example.com/wp-content/plugins/wordpress-seo/', 'http://example.com/wp-content/plugins/duplicate-post/', 'http://example.com/wp-content/plugins/w3-total-cache/', 'http://example.com/wp-content/plugins/redirection/', 'http://example.com/wp-content/plugins/favicon-by-realfavicongenerator/']
-
-```
----
-
-> - Show, Delete and Edit Exif Metadata of Image.
-```python
->>> from unsafe import ExifImage
->>>
->>> exif = ExifImage()
->>> 
->>> exif.delete_exif_img('/path/of/file.jpg')
-True
->>> exif.edit_exif_image('/path/of/file.jpg',key='model', value='unsafe')
-True
->>> exif.extract_exif_img('/path/of/file.jpg')
-{"make": "huawei", "model": "G-750", ...}
-```
----
-
-> - Detect and Cover Faces for Security
->
->> p.s : also you can use your dataset for detect faces in "casc_path" argument(Optional)
-```python
->>> from unsafe import Anonymous
->>> a = Anonymous()
->>>
->>> a.anon_picture('path/of/picture.jpg')
-"anon_picture_cache/QJA76FH.jpg"
-```
+    ```
 ---
