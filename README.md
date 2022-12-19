@@ -164,7 +164,7 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
                                               proxy="http://127.0.0.1:80"
                                             )
         print(site_users) # Output : ['http://wordpress.org/wp-content/plugins/wordpress-seo/',....]
-    ``‍‍`‍‍
+    ```
 ---
 - #### Measures to Remain Anonymous
     - **Detect and Cover Faces**
