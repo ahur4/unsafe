@@ -13,6 +13,7 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
 - [x] [Show, Delete and Edit Exif Metadata of Image](https://github.com/ahur4/unsafe#show-delete-and-edit-exif-metadata-of-image)
 - [x] [All the operations that can be done on WordPress are placed in this section](https://github.com/ahur4/unsafe#all-the-operations-that-can-be-done-on-wordpress-are-placed-in-this-section)
 - [x] [Measures to Remain Anonymous](https://github.com/ahur4/unsafe#measures-to-remain-anonymous)
+- [x] [Search in Browsers(google_dorking or ...)](https://github.com/ahur4/unsafe#search-in-browsers-google_dorking-or)
 
 # Usage
 - #### Encrypt and Decrypt Hashs and Encodes
@@ -174,6 +175,18 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
 
         result_path = unsafe.anon_picture(image_path="path/of/image.jpg")
         print(result_path) # Output : 'anon_picture_cache/UPW5X51.jpg'
+    ```
+---
+- #### Search in Browsers(google_dorking or ...)
+    - **Google Dorking**
+    ```python
+        from unsafe import Unsafe
+        unsafe = Unsafe()
+
+        # Search a Username in Insatgram
+        result = unsafe.google_dorking(query='"username" site:insatgram.com')
+
+        print(result) # Output : ['https://instagram.com/username', ....]
     ```
 ---
 # New Features : Coming Soon...

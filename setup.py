@@ -10,7 +10,7 @@ requirements = [
 
 setup(
     name='unsafe',
-    version='1.2.0',
+    version='1.2.1',
     author='Ahura Rahmani',
     author_email='ahur4.rahmani@gmail.com',
     maintainer='Masoud Nayebi',
@@ -28,7 +28,7 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     packages=find_packages(),
-    python_requires=">=3.10",
+    python_requires=">=3.8",
     include_package_data=True,
     classifiers=[
         'Development Status :: 5 - Production/Stable',

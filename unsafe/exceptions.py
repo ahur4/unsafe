@@ -9,6 +9,7 @@ class UnknownEncoding(Exception):
     def __str__(self):
         return f'{self.message}({self.encode})'
 
+
 class NotWordpress(Exception):
     """This Error Raising When Your Target Website is Not Built with Wordpess."""
 
@@ -19,6 +20,7 @@ class NotWordpress(Exception):
 
     def __str__(self):
         return f'{self.message}({self.url})'
+
 
 class SiteNotFound(Exception):
     """This Error Raising When The Program cant Connect to Your Target Website."""
@@ -31,6 +33,7 @@ class SiteNotFound(Exception):
     def __str__(self):
         return f'{self.message}({self.url})'
 
+
 class UsersFileNotFound(Exception):
     """This Error Raising When cant Find Users File on Site."""
 
@@ -40,6 +43,7 @@ class UsersFileNotFound(Exception):
 
     def __str__(self):
         return f'{self.message}'
+
 
 class NotFoundData(Exception):
     """This Error Raising When cant Find any DATA in Your Proccess."""

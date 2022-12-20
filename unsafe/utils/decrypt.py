@@ -1,7 +1,7 @@
 import base64
 from unsafe.utils.encrypt import Encryptor
 from unsafe.utils.strings import wordlist
-
+from typing import Optional, Union
 
 class Decrypter:
     """
@@ -9,9 +9,9 @@ class Decrypter:
     """
 
     def __init__(self) -> None:
-        pass
+        ...
 
-    def text_decrypt(self, hash: str | bytes, word: str | list = wordlist, encode: str | None = None, hash_method: str = "MD5", **kwargs) -> str | bytes:
+    def text_decrypt(self, hash: Optional[str | bytes], word: Optional[str | list] = wordlist, encode: Optional[str] = None, hash_method: str = "MD5", **kwargs) -> Union[str, bytes]:
         """
         function to return encrypted string.
         
@@ -243,12 +243,12 @@ class Decrypter:
                         if str(encryptor.text_encrypt(i, encode, "MD5")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                     else:
                         if str(encryptor.text_encrypt(words=i, hash_method="MD5")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                 return ""
             elif hash_method == 'sha1':
                 for i in word:
@@ -256,12 +256,12 @@ class Decrypter:
                         if str(encryptor.text_encrypt(i, encode, "SHA1")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                     else:
                         if str(encryptor.text_encrypt(words=i, hash_method="SHA1")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                 return ""
             elif hash_method == 'sha256':
                 for i in word:
@@ -269,12 +269,12 @@ class Decrypter:
                         if str(encryptor.text_encrypt(i, encode, "SHA256")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                     else:
                         if str(encryptor.text_encrypt(words=i, hash_method="SHA256")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                 return ""
             elif hash_method == 'sha224':
                 for i in word:
@@ -282,12 +282,12 @@ class Decrypter:
                         if str(encryptor.text_encrypt(i, encode, "SHA224")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                     else:
                         if str(encryptor.text_encrypt(words=i, hash_method="SHA224")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                 return ""
             elif hash_method == 'sha384':
                 for i in word:
@@ -295,12 +295,12 @@ class Decrypter:
                         if str(encryptor.text_encrypt(i, encode, "SHA384")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                     else:
                         if str(encryptor.text_encrypt(words=i, hash_method="SHA384")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                 return ""
             elif hash_method == 'sha512':
                 for i in word:
@@ -308,12 +308,12 @@ class Decrypter:
                         if str(encryptor.text_encrypt(i, encode, "SHA512")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                     else:
                         if str(encryptor.text_encrypt(words=i, hash_method="SHA512")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                 return ""
             elif hash_method == 'sha3-224':
                 for i in word:
@@ -321,12 +321,12 @@ class Decrypter:
                         if str(encryptor.text_encrypt(i, encode, "SHA3-224")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                     else:
                         if str(encryptor.text_encrypt(words=i, hash_method="SHA3-224")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                 return ""
             elif hash_method == 'sha3-256':
                 for i in word:
@@ -334,12 +334,12 @@ class Decrypter:
                         if str(encryptor.text_encrypt(i, encode, "SHA3-256")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                     else:
                         if str(encryptor.text_encrypt(words=i, hash_method="SHA3-256")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                 return ""
             elif hash_method == 'sha3-384':
                 for i in word:
@@ -347,12 +347,12 @@ class Decrypter:
                         if str(encryptor.text_encrypt(i, encode, "SHA3-384")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                     else:
                         if str(encryptor.text_encrypt(words=i, hash_method="SHA3-384")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                 return ""
             elif hash_method == 'sha3-512':
                 for i in word:
@@ -360,12 +360,12 @@ class Decrypter:
                         if str(encryptor.text_encrypt(i, encode, "SHA3-512")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                     else:
                         if str(encryptor.text_encrypt(words=i, hash_method="SHA3-512")) == hash:
                             return i
                         else:
-                            pass
+                            ...
                 return ""
             elif hash_method == 'shake128':
                 for i in word:
@@ -373,12 +373,12 @@ class Decrypter:
                         if str(encryptor.text_encrypt(word, encode, "SHAKE128", count=str(count))) == hash:
                             return word
                         else:
-                            pass
+                            ...
                     else:
                         if str(encryptor.text_encrypt(words=word, hash_method="SHAKE128", count=str(count))) == hash:
                             return word
                         else:
-                            pass
+                            ...
                 return ""
             elif hash_method == 'shake256':
                 if encode:

@@ -6,6 +6,7 @@ import random
 from unsafe.utils.strings import wp_plugins
 from unsafe.exceptions import NotWordpress, SiteNotFound, UsersFileNotFound, NotFoundData
 from queue import Queue
+from typing import Optional
 
 plugins_list = []
 counter = 0
@@ -16,7 +17,7 @@ queue = Queue()
 class Wordpress:
 
     def __init__(self):
-        pass
+        ...
 
     def _wp_checker(self, domain: str):
         if 'http://' in domain:
@@ -51,7 +52,7 @@ class Wordpress:
             if not self._wp_checker(domain):
                 raise NotWordpress(domain)
         except:
-            pass
+            ...
         try:
             r = requests.get("https://"+domain+'/wp-json/wp/v2/users/').text
             j = json.loads(r)
@@ -79,7 +80,7 @@ class Wordpress:
         except Exception as e:
             raise e
 
-    def _send_request(self, plugins: list, url: str, timeout: int, proxy: list | str = None):
+    def _send_request(self, plugins: list, url: str, timeout: int, proxy: Optional[list | str] = None):
         global plugins_list
         global counter
 
@@ -102,13 +103,13 @@ class Wordpress:
                 if r.status_code == 200:
                     plugins_list.append(r.url)
                 else:
-                    pass
+                    ...
             except (requests.exceptions.ProxyError, requests.exceptions.ConnectTimeout):
-                pass
+                ...
             except Exception as e:
                 raise e
 
-    def wp_plugin_scanner(self, domain: str, timeout: int = 3, workers: int = 3, proxy: list | str = None):
+    def wp_plugin_scanner(self, domain: str, timeout: int = 3, workers: int = 3, proxy: Optional[list | str] = None):
         if not self._wp_checker(domain):
             raise NotWordpress(domain)
 

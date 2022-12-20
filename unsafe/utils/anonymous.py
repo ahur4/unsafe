@@ -7,7 +7,7 @@ import string
 
 class Anonymous:
     def __init__(self):
-        pass
+        ...
 
     def _string_generator(self, size=7, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))

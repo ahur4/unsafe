@@ -4,7 +4,7 @@ import random
 from threading import Thread
 from queue import Queue
 from socket import gethostbyname
-
+from typing import Optional
 
 class BruteForcer:
 
@@ -16,15 +16,15 @@ class BruteForcer:
         self.file_manager_founded = []
         self.subdomain_bypassed = {}
 
-    def _send_req_admin_finder(self, domain: str, timeout: int, links_queue, user_agent: str | None = None,
-                               cookie: str | None = None, proxy: str | None = None, proxies: list | None = None):
+    def _send_req_admin_finder(self, domain: str, timeout: int, links_queue, user_agent: Optional[str] = None,
+                               cookie: Optional[str] = None, proxy: Optional[str] = None, proxies: Optional[list] = None):
 
         if "http://" in domain:
             domain = domain.replace("http://", "")
         elif "https://" in domain:
             domain = domain.replace("https://", "")
         else:
-            pass
+            ...
         domain = "http://" + domain
         while not links_queue.empty():
             i = links_queue.get()
@@ -72,14 +72,14 @@ class BruteForcer:
                 if r.status_code == 200:
                     self.admin_finder_founded.append(full_link)
                 else:
-                    pass
+                    ...
             except KeyboardInterrupt:
                 break
 
         return self.admin_finder_founded
 
-    def admin_finder(self, domain: str, workers: int = 3, timeout: int = 10, ext: str = "php", user_agent: str | None = None,
-                     cookie: str | None = None, proxy: str | None = None, proxies: list | None = None):
+    def admin_finder(self, domain: str, workers: int = 3, timeout: int = 10, ext: str = "php", user_agent: Optional[str] = None,
+                     cookie: Optional[str] = None, proxy: Optional[str] = None, proxies: Optional[list] = None):
         threads = []
         links = []
         self.admin_finder_founded.clear()
@@ -116,15 +116,15 @@ class BruteForcer:
             i.join()
         return self.admin_finder_founded
 
-    def _send_req_file_manager(self, domain: str, timeout: int, links_queue, user_agent: str | None = None,
-                               cookie: str | None = None, proxy: str | None = None, proxies: list | None = None):
+    def _send_req_file_manager(self, domain: str, timeout: int, links_queue, user_agent: Optional[str] = None,
+                               cookie: Optional[str] = None, proxy: Optional[str] = None, proxies: Optional[list] = None):
 
         if "http://" in domain:
             domain = domain.replace("http://", "")
         elif "https://" in domain:
             domain = domain.replace("https://", "")
         else:
-            pass
+            ...
 
         domain = "http://" + domain
         while not links_queue.empty():
@@ -173,14 +173,14 @@ class BruteForcer:
                 if r.status_code == 200:
                     self.file_manager_founded.append(f"{r.url}")
                 else:
-                    pass
+                    ...
             except KeyboardInterrupt:
                 break
 
         return self.file_manager_founded
 
-    def filemanager_finder(self, domain: str, workers: int = 5, timeout: int = 5, user_agent: str | None = None,
-                           cookie: str | None = None, proxy: str | None = None, proxies: list | None = None):
+    def filemanager_finder(self, domain: str, workers: int = 5, timeout: int = 5, user_agent: Optional[str] = None,
+                           cookie: Optional[str] = None, proxy: Optional[str] = None, proxies: Optional[list] = None):
         threads = []
         self.file_manager_founded.clear()
         for i in manager:
@@ -203,7 +203,7 @@ class BruteForcer:
         elif "https://" in domain:
             domain = domain.replace("https://", "")
         else:
-            pass
+            ...
 
         # domain = "http://" + domain
         while not links_queue.empty():

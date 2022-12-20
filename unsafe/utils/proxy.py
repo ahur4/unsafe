@@ -10,7 +10,7 @@ class Proxy:
     """Proxy"""
 
     def __init__(self) -> None:
-        pass
+        ...
 
     def proxy_wrapper(self, protocol: str = "http", max_ping: int = 200) -> dict:
         """
@@ -51,7 +51,7 @@ class Proxy:
                     int(i)
                     list_port.append(i)
                 except:
-                    pass
+                    ...
 
             #Ordering Proxies
             proxy_list = dict(zip(list_ip, list_port))
@@ -89,7 +89,7 @@ class Proxy:
                 )
                 proxy_status = True
             except:
-                pass
+                ...
         elif protocol == "socks4":
             try:
                 socks4_test = socks.socksocket()
@@ -99,7 +99,7 @@ class Proxy:
                 socks4_test.connect(("www.google.com", 80))
                 proxy_status = True
             except:
-                pass
+                ...
         elif protocol == "socks5":
             try:
                 socks5_test = socks.socksocket()
@@ -109,5 +109,5 @@ class Proxy:
                 socks5_test.connect(("www.google.com", 80))
                 proxy_status = True
             except:
-                pass
+                ...
         return proxy_status

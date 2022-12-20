@@ -5,7 +5,7 @@ from unsafe.utils.bruteforce import BruteForcer
 from unsafe.utils.wp import Wordpress
 from unsafe.utils.exifdata import ExifImage
 from unsafe.utils.anonymous import Anonymous
-
+from unsafe.utils.seeker import Seeker
 
 class Unsafe(
     Encryptor,
@@ -14,6 +14,7 @@ class Unsafe(
     BruteForcer,
     Wordpress,
     ExifImage,
-    Anonymous
+    Anonymous,
+    Seeker
 ):
-    pass
+    ...

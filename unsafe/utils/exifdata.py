@@ -6,7 +6,7 @@ from exif import Image
 
 class ExifImage:
     def __init__(self) -> None:
-        pass
+        ...
 
     def extract_exif_img(self, path: Path):
         if not os.path.isfile(path):
@@ -20,7 +20,7 @@ class ExifImage:
                 try:
                     exif_dict[f"{i}"] = f"{image[i]}"
                 except:
-                    pass
+                    ...
             return exif_dict
         else:
             return {}

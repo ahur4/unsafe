@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 import base64
 import hashlib
 from unsafe.exceptions import UnknownEncoding
@@ -10,9 +10,9 @@ class Encryptor:
     """
 
     def __init__(self) -> None:
-        pass
+        ...
 
-    def text_encrypt(self, words: str, encode: str | None = None, hash_method: str = 'MD5', **kwargs: str):
+    def text_encrypt(self, words: str, encode: Optional[str] = None, hash_method: str = 'MD5', **kwargs: str):
         """
         function to return encrypted string.
         
@@ -71,7 +71,7 @@ class Encryptor:
                     f'The argument(s) {[i for i in kwargs.keys()]} not defined !')
 
         if encode and hash_method == 'caesar' or not encode and hash_method == 'caesar':
-            pass
+            ...
         elif encode:
             try:
                 if type(words) == bytes:
@@ -144,7 +144,7 @@ class Encryptor:
         else:
             raise ValueError('This Hash Method Not Available !')
 
-    def file_encrypt(self, filename: str, encode: str | None = None, hash_method: str = 'MD5',
+    def file_encrypt(self, filename: str, encode: Optional[str] = None, hash_method: str = 'MD5',
                      **kwargs: dict[str, int]):
         """
         function to return encrypted string.
