@@ -10,7 +10,7 @@ requirements = [
 
 setup(
     name='unsafe',
-    version='1.2.1',
+    version='1.2.11',
     author='Ahura Rahmani',
     author_email='ahur4.rahmani@gmail.com',
     maintainer='Masoud Nayebi',

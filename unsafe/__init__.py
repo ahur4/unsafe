@@ -1,1 +1,1 @@
-from unsafe.unsafe import Unsafe
+from .unsafe import Unsafe
