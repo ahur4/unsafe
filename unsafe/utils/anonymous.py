@@ -12,7 +12,7 @@ class Anonymous:
     def _string_generator(self, size=7, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
 
-    def anon_picture(self, image_path: Path, casc_path: Path = 'unsafe/utils/datasets/front_sideview_face_detect.xml'):
+    def anon_picture(self, image_path: Path, casc_path: Path = 'unsafe/utils/front_sideview_face_detect.xml'):
         """
         Detect And Cover Faces for Anonymously.
         """
