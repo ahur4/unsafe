@@ -1,0 +1,2 @@
+include unsafe/utils/a_dataset/front_face_detect.xml
+include unsafe/utils/a_dataset/front_sideview_face_detect.xml

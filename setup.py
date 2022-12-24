@@ -10,7 +10,7 @@ requirements = [
 
 setup(
     name='unsafe',
-    version='1.2.14',
+    version='1.2.2',
     author='Ahura Rahmani',
     author_email='ahur4.rahmani@gmail.com',
     maintainer='Masoud Nayebi',
@@ -28,6 +28,9 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     packages=find_packages(),
+    package_data={
+        'face_recognition': ['utils/*.xml']
+    },
     python_requires=">=3.8",
     include_package_data=True,
     classifiers=[

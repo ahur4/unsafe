@@ -12,7 +12,7 @@ class Anonymous:
     def _string_generator(self, size=7, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
 
-    def anon_picture(self, image_path: Path, casc_path: Path = 'unsafe/utils/front_sideview_face_detect.xml'):
+    def anon_picture(self, image_path: Path, casc_path: Path = 'unsafe/utils/a_dataset/front_sideview_face_detect.xml'):
         """
         Detect And Cover Faces for Anonymously.
         """
@@ -32,6 +32,3 @@ class Anonymous:
         file_path = f'anon_picture_cache/{self._string_generator()}.jpg'
         cv2.imwrite(file_path, image)
         return file_path
-
-# a = Anonymous()
-# print(a.anon_picture('unsafe/utils/testt.jpg'))
