@@ -6,6 +6,9 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
 - Author : Ahur4
 - Maintainer : MesutFD
 
+- - 𝗘 𝗫 𝗣 𝗟 𝗢 𝗜 𝗧 : [Telegram Channel](https://t.me/ExploitPriv8)
+
+
 # Features
 - [x] [Encrypt and Decrypt Hashs and Encodes](https://github.com/ahur4/unsafe#encrypt-and-decrypt-hashs-and-encodes)
 - [x] [Collecting Proxies and Check Their Health](https://github.com/ahur4/unsafe#collecting-proxies-and-check-their-health)
@@ -13,7 +16,7 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
 - [x] [Show, Delete and Edit Exif Metadata of Image](https://github.com/ahur4/unsafe#show-delete-and-edit-exif-metadata-of-image)
 - [x] [All the operations that can be done on WordPress are placed in this section](https://github.com/ahur4/unsafe#all-the-operations-that-can-be-done-on-wordpress-are-placed-in-this-section)
 - [x] [Measures to Remain Anonymous](https://github.com/ahur4/unsafe#measures-to-remain-anonymous)
-- [x] [Search in Browsers(google_dorking or ...)](https://github.com/ahur4/unsafe#search-in-browsers-google_dorking-or)
+- [x] [Search in Browsers(google_dorking or ...)](https://github.com/ahur4/unsafe#search-in-browsers-google_dorking-or-)
 
 # Usage
 - #### Encrypt and Decrypt Hashs and Encodes
