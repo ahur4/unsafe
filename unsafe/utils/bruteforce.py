@@ -1,10 +1,15 @@
-from unsafe.utils.strings import aspx_login, asp_login, php_login, html_login, cgi_login, brf_login, cfm_login, js_login, slash_login, ua, manager, subdomain
+from unsafe.utils.strings import aspx_login, asp_login, php_login, html_login, cgi_login, brf_login, cfm_login, js_login, slash_login, ua, manager, subdomain, wordlist
 import requests
 import random
 from threading import Thread
 from queue import Queue
 from socket import gethostbyname
 from typing import Optional
+from zipfile import ZipFile
+from queue import Queue
+from threading import Thread
+from pathlib import Path
+
 
 class BruteForcer:
 
@@ -12,9 +17,12 @@ class BruteForcer:
         self.admin_finder_queue = Queue()
         self.file_manager_queue = Queue()
         self.cloudflare_subdomain_bypasser = Queue()
+        self.zip_cracker_queue = Queue()
         self.admin_finder_founded = []
         self.file_manager_founded = []
         self.subdomain_bypassed = {}
+        self.zip_threads = []
+        self.zip_password_founded = []
 
     def _send_req_admin_finder(self, domain: str, timeout: int, links_queue, user_agent: Optional[str] = None,
                                cookie: Optional[str] = None, proxy: Optional[str] = None, proxies: Optional[list] = None):
@@ -234,3 +242,36 @@ class BruteForcer:
         for i in threads:
             i.join()
         return self.subdomain_bypassed
+
+    def _crack_zip_handler(password: str, zip_file: ZipFile):
+        idx = 0
+        try:
+            zip_file.extractall(pwd=password)
+            return True
+        except:
+            return False
+
+    def _crack_zip(self, password_list: Queue, zip_path: Path):
+        zip_object = ZipFile(zip_path)
+        while not password_list.empty():
+            i = password_list.get()
+            if self._crack_zip_handler(password=i, zip_path=zip_object):
+                self.zip_password_founded.append(i)
+                for k in self.zip_threads:
+                    k._stop()
+            else:
+                i.task_done()
+
+    def zip_cracker(self, zip_path: Path, password_list: list = wordlist, workers: int = 3):
+        self.zip_threads.clear()
+        for i in password_list:
+            self.zip_cracker_queue.put(i)
+        for i in range(workers):
+            thread_ = Thread(target=self._crack_zip, args=(
+                self.zip_cracker_queue, zip_path))
+            thread_.setDaemon(True)
+            thread_.start()
+            self.zip_threads.append(thread_)
+        for i in self.zip_threads:
+            i.join()
+        return self.zip_password_founded

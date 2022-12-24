@@ -6,6 +6,7 @@ requirements = [
     'requests<3.0,>=2.25.1',
     'PySocks==1.7.1',
     'beautifulsoup4==4.11.1',
+    'zipfile'
 ]
 
 setup(
