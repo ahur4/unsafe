@@ -4,7 +4,7 @@ from unsafe.utils.proxy import Proxy
 from unsafe.utils.bruteforce import BruteForcer
 from unsafe.utils.wp import Wordpress
 from unsafe.utils.exifdata import ExifImage
-from unsafe.utils.anonymous import Anonymous
+# from unsafe.utils.anonymous import Anonymous
 from unsafe.utils.seeker import Seeker
 from queue import Queue
 
@@ -16,7 +16,7 @@ class Unsafe(
     BruteForcer,
     Wordpress,
     ExifImage,
-    Anonymous,
+    # Anonymous,
     Seeker
 ):
     def __init__(self):

@@ -3,12 +3,15 @@ import bs4
 from urllib.parse import urlparse, parse_qs
 from typing import Optional
 from unsafe.utils.strings import ua
-import json, random
+import json, random, string
 
 class Seeker:
     def __init__(self):
         ...
-
+    
+    def _string_generator(self, size=7, chars=string.ascii_uppercase + string.digits):
+        return ''.join(random.choice(chars) for _ in range(size))
+    
     def _filter_result(self, link: str):
         try:
             if link.startswith('/url?'):
