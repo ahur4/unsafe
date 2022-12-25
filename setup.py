@@ -6,12 +6,11 @@ requirements = [
     'requests<3.0,>=2.25.1',
     'PySocks==1.7.1',
     'beautifulsoup4==4.11.1',
-    'zipfile'
 ]
 
 setup(
     name='unsafe',
-    version='1.2.22',
+    version='1.2.28',
     author='Ahura Rahmani',
     author_email='ahur4.rahmani@gmail.com',
     maintainer='Masoud Nayebi',

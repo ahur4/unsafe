@@ -1,4 +1,4 @@
-from unsafe.utils.strings import aspx_login, asp_login, php_login, html_login, cgi_login, brf_login, cfm_login, js_login, slash_login, ua, manager, subdomain, wordlist
+from strings import aspx_login, asp_login, php_login, html_login, cgi_login, brf_login, cfm_login, js_login, slash_login, ua, manager, subdomain, subdomain2, wordlist
 import requests
 import random
 from threading import Thread
@@ -6,8 +6,6 @@ from queue import Queue
 from socket import gethostbyname
 from typing import Optional
 from zipfile import ZipFile
-from queue import Queue
-from threading import Thread
 from pathlib import Path
 
 
@@ -18,11 +16,13 @@ class BruteForcer:
         self.file_manager_queue = Queue()
         self.cloudflare_subdomain_bypasser = Queue()
         self.zip_cracker_queue = Queue()
+        self.subdomain_scanner_queue = Queue()
         self.admin_finder_founded = []
         self.file_manager_founded = []
         self.subdomain_bypassed = {}
         self.zip_threads = []
         self.zip_password_founded = []
+        self.subdomain_founded = []
 
     def _send_req_admin_finder(self, domain: str, timeout: int, links_queue, user_agent: Optional[str] = None,
                                cookie: Optional[str] = None, proxy: Optional[str] = None, proxies: Optional[list] = None):
@@ -243,26 +243,26 @@ class BruteForcer:
             i.join()
         return self.subdomain_bypassed
 
-    def _crack_zip_handler(password: str, zip_file: ZipFile):
-        idx = 0
+    def _crack_zip_handler(self, password: str, zip_file: ZipFile):
         try:
             zip_file.extractall(pwd=password)
-            return True
         except:
             return False
+        return True
 
     def _crack_zip(self, password_list: Queue, zip_path: Path):
         zip_object = ZipFile(zip_path)
         while not password_list.empty():
             i = password_list.get()
-            if self._crack_zip_handler(password=i, zip_path=zip_object):
+            if self._crack_zip_handler(password=i, zip_file=zip_object):
                 self.zip_password_founded.append(i)
                 for k in self.zip_threads:
                     k._stop()
             else:
-                i.task_done()
+                password_list.task_done()
+                print(i)
 
-    def zip_cracker(self, zip_path: Path, password_list: list = wordlist, workers: int = 3):
+    def zip_cracker(self, zip_path: Path, password_list: Path = wordlist, workers: int = 3):
         self.zip_threads.clear()
         for i in password_list:
             self.zip_cracker_queue.put(i)
@@ -275,3 +275,47 @@ class BruteForcer:
         for i in self.zip_threads:
             i.join()
         return self.zip_password_founded
+
+    def _send_req_subdomain_scanner(self, domain: str, subdomains: Queue, timeout: int = 5, proxy: Optional[str] = None):
+        if "http://" in domain:
+            domain = domain.replace("http://", "")
+        elif "https://" in domain:
+            domain = domain.replace("https://", "")
+        else:
+            ...
+        while not subdomains.empty():
+            subdomain = subdomains.get()
+            full_link = f"http://{subdomain}.{domain}"
+            print(full_link)
+            try:
+                if proxy:
+                    r = requests.get(full_link, timeout=timeout, proxies={
+                                     "http": proxy, "https": proxy}, verify=True)
+                else:
+                    r = requests.get(full_link, timeout=timeout, verify=True)
+                subdomains.task_done()
+                if r.status_code in [200, 300, 301, 302, 303, 304, 305, 306, 307]:
+                    self.subdomain_founded.append(
+                        full_link.replace("http://", ""))
+            except:
+                ...
+
+    def subdomain_scanner(self, domain: str, workers: int = 3, subdomains: list = subdomain2, timeout: int = 5, proxy: Optional[str] = None):
+        self.subdomain_founded.clear()
+        _threads = []
+        for i in subdomains:
+            self.subdomain_scanner_queue.put(i)
+        for i in range(workers):
+            if proxy:
+                t = Thread(target=self._send_req_subdomain_scanner, args=(
+                    domain, self.subdomain_scanner_queue, timeout, proxy))
+            else:
+                t = Thread(target=self._send_req_subdomain_scanner, args=(
+                    domain, self.subdomain_scanner_queue, timeout))
+            t.setDaemon = True
+            t.start()
+            _threads.append(t)
+        for i in _threads:
+            i.join()
+        return self.subdomain_founded
+
