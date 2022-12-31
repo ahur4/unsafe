@@ -3,8 +3,9 @@ from unsafe.utils.decrypt import Decrypter
 from unsafe.utils.proxy import Proxy
 from unsafe.utils.bruteforce import BruteForcer
 from unsafe.utils.wp import Wordpress
-from unsafe.utils.exifdata import ExifImage
+from unsafe.utils.forensic import Forensic
 from unsafe.utils.crawler import Crawler
+from unsafe.utils.network import Network
 from queue import Queue
 
 
@@ -14,8 +15,9 @@ class Unsafe(
     Proxy,
     BruteForcer,
     Wordpress,
-    ExifImage,
-    Crawler
+    Forensic,
+    Crawler,
+    Network
 ):
     def __init__(self):
         self.admin_finder_queue = Queue()

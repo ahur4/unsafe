@@ -6,11 +6,13 @@ requirements = [
     'requests<3.0,>=2.25.1',
     'PySocks==1.7.1',
     'beautifulsoup4==4.11.1',
+    'Pillow==9.3.0',
+    'urllib3==1.26.12'
 ]
 
 setup(
     name='unsafe',
-    version='1.2.30',
+    version='1.2.4',
     author='Ahura Rahmani',
     author_email='ahur4.rahmani@gmail.com',
     maintainer='Masoud Nayebi',
@@ -19,10 +21,10 @@ setup(
     url='https://github.com/ahur4/unsafe',
     install_requires=requirements,
     keywords=[
-        'hack', 'hack module', 'pentest', 'unsafe', 'osint',
+        'hack', 'hack-module', 'pentest', 'unsafe', 'osint',
         'osint-python', 'hacking-python', 'cryptography', 'vulnerability-scanner', 'vulnerability', 'security',
-        'hacker', 'admin-finder', 'wordpress-scanner', 'instagram-osint', 'vulnerability', 'cve', 'proxy-wrapper', 'proxy-checker',
-        'ssh-connect', 'hydra', 'cracker', 'sqlmap', 'ahur4', 'mesutfd'
+        'hacker', 'admin-finder', 'wordpress-scanner', 'instagram-osint', 'cve', 'proxy-wrapper', 'proxy-checker',
+        'ssh-connect', 'hydra', 'cracker', 'sqlmap', 'ahur4', 'mesutfd','crawler','acunetix'
     ],
     description='A practical and optimal library for those interested in Pentest, cryptography,Vulnerability Scanner and ..',
     long_description=long_description,

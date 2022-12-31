@@ -1,6 +1,6 @@
 import requests
-import bs4
-from urllib.parse import urlparse, parse_qs
+from bs4 import BeautifulSoup as bs
+from urllib.parse import urlparse, parse_qs, urljoin
 from typing import Optional
 from unsafe.utils.strings import ua
 import json
@@ -44,7 +44,7 @@ class Crawler:
             ask = requests.get(
                 f'https://www.ask.com/web?q={query}', timeout=timeout)
 
-        soup = bs4.BeautifulSoup(google.text, "html.parser")
+        soup = bs(google.text, "html.parser")
         try:
             anchors = soup.find(id='search').findAll('a')
         except AttributeError:
@@ -59,7 +59,7 @@ class Crawler:
                 pass
         ######################
         if "There are no results for" not in bing.text:
-            soup = bs4.BeautifulSoup(bing.text,  "html.parser")
+            soup = bs(bing.text,  "html.parser")
             try:
                 anchors = soup.find(id='b_results').findAll("a")
                 for i in anchors:
@@ -67,7 +67,7 @@ class Crawler:
             except:
                 ...
         ######################
-        soup = bs4.BeautifulSoup(ask.text,  "html.parser")
+        soup = bs(ask.text,  "html.parser")
         try:
             anchors = soup.find(
                 attrs={"class": "PartialSearchResults-results"}).findAll("a")
@@ -78,7 +78,7 @@ class Crawler:
         ######################
         return list(set(res))
 
-    def link_extractor(self, source):
+    def _link_extractor(self, source):
         before_result = []
         result = []
         for i in source.split('\n'):
@@ -93,7 +93,7 @@ class Crawler:
             result.append(i.group())
         return result
 
-    def phone_extractor(self, source: str):
+    def _phone_extractor(self, source: str):
         before_result = []
         result = []
         for i in source.split('\n'):
@@ -118,7 +118,7 @@ class Crawler:
             result.append(i.group())
         return result
 
-    def username_extractor(self, source: str):
+    def _username_extractor(self, source: str):
         before_result = []
         result = []
         for i in source.split('\n'):
@@ -133,7 +133,7 @@ class Crawler:
             result.append(i.group())
         return result
 
-    def email_extractor(self, source: str):
+    def _email_extractor(self, source: str):
         before_result = []
         result = []
         for i in source.split('\n'):
@@ -148,7 +148,10 @@ class Crawler:
             result.append(i.group())
         return result
 
-    def crawl_single_page(self, url: str, timeout: int = 10, proxy: Optional[str] = None, proxies: Optional[list] = None):
+    def crawl_page(self, url: str, timeout: int = 10, proxy: Optional[str] = None, proxies: Optional[list] = None):
+        """
+        Crawling a Page and Extract Phone, Email, Usernames and Other Links.
+        """
         if "http://" in url:
             url = url.replace("http://", "")
         elif "https://" in url:
@@ -156,7 +159,7 @@ class Crawler:
         else:
             ...
         url = "http://" + url
-        
+        domain_name = urlparse(url).netloc
         if proxy:
             proxies = {"http": proxy, "https": proxy}
         elif proxies:
@@ -165,24 +168,93 @@ class Crawler:
         else:
             r = requests.get(url, timeout=timeout)
             return {
-                "links": self.link_extractor(r.text),
-                "phones": self.phone_extractor(r.text),
-                "usernames": self.username_extractor(r.text),
-                "emails": self.email_extractor(r.text)
+                "links": self._link_extractor(r.text),
+                "phones": self._phone_extractor(r.text),
+                "usernames": self._username_extractor(r.text),
+                "emails": self._email_extractor(r.text)
             }
         r = requests.get(url, timeout=timeout, proxies=proxies)
         return {
-                "links": self.link_extractor(r.text),
-                "phones": self.phone_extractor(r.text),
-                "usernames": self.username_extractor(r.text),
-                "emails": self.email_extractor(r.text)
-            }
+            "links": self._link_extractor(r.text),
+            "phones": self._phone_extractor(r.text),
+            "usernames": self._username_extractor(r.text),
+            "emails": self._email_extractor(r.text)
+        }
 
-# a = Crawler()
-# print(a.browser_search('"ahura" site:instagram.com'))
-# # r = requests.get("https://www.iranair.de/fa/contact-us.html")
-# print(a.crawl_single_page("https://www.iranair.de/fa/contact-us.html"))
-# # print(a.link_extractor(r.text))
-# # print(a.phone_extractor(r.text))
-# # print(a.username_extractor(r.text))
-# # #
+    def _get_all_forms(self, url):
+        """Given a `url`, it returns all forms from the HTML content"""
+        soup = bs(requests.get(url).content, "html.parser")
+        return soup.find_all("form")
+
+    def _get_form_details(self, form):
+        """
+        This function extracts all possible useful information about an HTML `form`
+        """
+        details = {}
+        # get the form action (target url)
+        action = form.attrs.get("action", "").lower()
+        # get the form method (POST, GET, etc.)
+        method = form.attrs.get("method", "get").lower()
+        # get all the input details such as type and name
+        inputs = []
+        for input_tag in form.find_all("input"):
+            input_type = input_tag.attrs.get("type", "text")
+            input_name = input_tag.attrs.get("name")
+            inputs.append({"type": input_type, "name": input_name})
+        # put everything to the resulting dictionary
+        details["action"] = action
+        details["method"] = method
+        details["inputs"] = inputs
+        return details
+
+    def _submit_form(self, form_details, url, value):
+        """
+        Submits a form given in `form_details`
+        Params:
+            form_details (list): a dictionary that contain form information
+            url (str): the original URL that contain that form
+            value (str): this will be replaced to all text and search inputs
+        Returns the HTTP Response after form submission
+        """
+        # construct the full URL (if the url provided in action is relative)
+        target_url = urljoin(url, form_details["action"])
+        # get the inputs
+        inputs = form_details["inputs"]
+        data = {}
+        for input in inputs:
+            # replace all text and search values with `value`
+            if input["type"] == "text" or input["type"] == "search":
+                input["value"] = value
+            input_name = input.get("name")
+            input_value = input.get("value")
+            if input_name and input_value:
+                # if input name and value are not None,
+                # then add them to the data of form submission
+                data[input_name] = input_value
+
+        if form_details["method"] == "post":
+            return requests.post(target_url, data=data)
+        else:
+            # GET request
+            return requests.get(target_url, params=data)
+
+    def xss_scanner(self, url: str, js_script: str = "<Script>alert('hi')</scripT>"):
+        """
+        Given a `url`, it return all XSS vulnerable forms and 
+        returns True if any is vulnerable, False otherwise
+        """
+        # get all the forms from the URL
+        forms = self._get_all_forms(url)
+        # returning value
+        is_vulnerable = False
+        # iterate over all forms
+        for form in forms:
+            form_details = self._get_form_details(form)
+            content = self._submit_form(
+                form_details, url, js_script).content.decode()
+            if js_script in content:
+                is_vulnerable = True
+        return {
+            "is_vulnerable": is_vulnerable,
+            "form_detail": form_details
+        }

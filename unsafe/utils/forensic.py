@@ -2,11 +2,16 @@ from PIL import Image
 from pathlib import Path
 import os
 from exif import Image
+import cv2
+import numpy as np
+from typing import Optional
+import time
 
 
-class ExifImage:
+class Forensic:
     def __init__(self) -> None:
         ...
+
 
     def extract_exif_img(self, path: Path):
         if not os.path.isfile(path):
@@ -53,3 +58,4 @@ class ExifImage:
             return True
         except Exception as e:
             return False
+

@@ -14,29 +14,6 @@ class Decrypter:
     def text_decrypt(self, hash: Optional[str | bytes], word: Optional[str | list] = wordlist, encode: Optional[str] = None, hash_method: str = "MD5", **kwargs) -> Union[str, bytes]:
         """
         function to return encrypted string.
-        
-        args:
-
-            * hash: your hash to decrypt
-            
-            `text_decrypt(hash = "2fe89d7b42be7dedb4304ac249fbde9c")`
-            
-            * encode: your choose to encode word (default=None)
-            
-            `text_decrypt(hash = "2fe89d7b42be7dedb4304ac249fbde9c", encode = "UTF-8")`
-            
-            * hash_method: your chosen hash method(default=md5)
-            
-            `text_decrypt(hash = "2fe89d7b42be7dedb4304ac249fbde9c", hash_method = "SHA1")`
-            
-            `Available Hash Method's : ['MD5', 'SHA1', 'SHA224', 'SHA256', 'SHA384', 'SHA512', 'SHA3-224', 'SHA3-256', 'SHA3-384', 'SHA3-512', 'SHAKE128', 'SHAKE256', 'BASE16', 'BASE32', 'BASE64', 'BASE85', 'ASCII85', 'CAESAR']`
-
-            * count: for 'CAESAR' method(default = 1)
-            
-            defalut count for shake method's based on len of hash
-            
-            
-            `text_decrypt(hash = "votbgf", hash_method = 'CAESAR', count = 4)`
         """
 
         hash_method = hash_method.lower()

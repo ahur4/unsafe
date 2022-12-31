@@ -14,8 +14,7 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
 - [x] [Collecting Proxies and Check Their Health](https://github.com/ahur4/unsafe#collecting-proxies-and-check-their-health)
 - [x] [BruteForcing Part for Find Admin Panel or FileManager or CloudFlare Bypassing ...](https://github.com/ahur4/unsafe#bruteforcing-part-for-find-admin-panel-or-filemanager-or-cloudflare-bypassing)
 - [x] [Show, Delete and Edit Exif Metadata of Image](https://github.com/ahur4/unsafe#show-delete-and-edit-exif-metadata-of-image)
-- [x] [All the operations that can be done on WordPress are placed in this section](https://github.com/ahur4/unsafe#all-the-operations-that-can-be-done-on-wordpress-are-placed-in-this-section)
-- [x] [Search in Browsers(google, bing or ...)](https://github.com/ahur4/unsafe#search-in-browsersgoogle-bing-or-)
+- [x] [Wordpress](https://github.com/ahur4/unsafe#wordpress)
 - [x] [Crawling.](https://github.com/ahur4/unsafe#crawling)
 - [x] [Network.](https://github.com/ahur4/unsafe#network)
 
@@ -123,6 +122,20 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
                                         )
         print(realip) # Output : {'ns4.google.com': '216.239.38.10', 'search.google.com': '142.251.39.14', ....}
     ```
+    - **SubDomain Finder**
+    ```python
+        from unsafe import Unsafe
+        unsafe = Unsafe()
+
+        result = unsafe.subdomain_scanner(
+            domain="google.com",
+            workers=5,
+            subdomains=["ww1", "forum", "download", "product", "search", "cdn", "ns1"], #Also this part have a default subdomains list.
+            timeout=5,
+            proxy="http://127.0.0.1:80"
+            )
+        print(result) # Output : ["ww1.google.com", ...]
+    ```
 ---
 - #### Show, Delete and Edit Exif Metadata of Image.
     - **Delete Metadata Usage**
@@ -150,7 +163,7 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
         print(Exifed) # Output : {"make": "huawei", "model": "G-750", ...}
     ```
 ---
-- #### All the operations that can be done on WordPress are placed in this section.
+- #### Wordpress.
     - **Extract Admin Users**
     ```python
         from unsafe import Unsafe
@@ -173,19 +186,6 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
     ```
 ---
 
-- #### Search in Browsers(google, bing or ...)
-    - **Search in Three Search Engines: Google, Bing and Ask**
-    ```python
-        from unsafe import Unsafe
-        unsafe = Unsafe()
-
-        # Search a Username in Insatgram
-        result = unsafe.browser_search(query='"username" site:insatgram.com', timeout=10, proxy="http://127.0.0.1:80")
-
-        print(result) # Output : ['https://instagram.com/username', ....]
-    ```
----
-
 - #### Crawling.
     - **Crawling a single Page and Extract Usernames, Phones, Emails and ...**
     ```python
@@ -194,6 +194,23 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
 
         result = unsafe.crawl_single_page(url="https://example.com/contact.php", timeout=5, proxy="http://127.0.0.1:80")
         print(result) #Output : {"links": [...], "phones": [...], ...}
+    ```
+    - **Search in Three Search Engines: Google, Bing and Ask**
+    ```python
+        from unsafe import Unsafe
+        unsafe = Unsafe()
+
+        # Search a Username in Insatgram
+        result = unsafe.browser_search(query='"username" site:insatgram.com', timeout=10, proxy="http://127.0.0.1:80")
+        print(result) # Output : ['https://instagram.com/username', ....]
+    ```
+    - **Scan Entered Page and Detect Xss Vulnerability.**
+    ```python
+        from unsafe import Unsafe
+        unsafe = Unsafe()
+
+        result = unsafe.xss_scanner(url="https://xsslabs.com/xss-labs-1.php", js_script="<Script>alert('hi')</scripT>")
+        print(result) # Output : {'is_vulnerable': True, 'form_detail': {'action': '#', 'method': 'get', 'inputs': [{'type': 'text', 'name': 'name', 'value': "<Script>alert('hi')</scripT>"}]}}
     ```
 ---
 - #### Network
@@ -204,5 +221,13 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
 
         result = unsafe.port_scanner(host="127.0.0.1", ports=[80, 53, 443, 127])
         print(result) # Output : [80, 443]
+    ```
+    - **Mac Address Lookup(find owner of device company)**
+    ```python
+        from unsafe import Unsafe
+        unsafe = Unsafe()
+
+        result = unsafe.mac_address_lookup(mac="00:00:5e:00:53:af")
+        print(result) #Output : "U.S. Department of Defense (IANA)"
     ```
 # New Features : Coming Soon...

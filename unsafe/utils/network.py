@@ -1,7 +1,7 @@
 import socket
 from threading import Thread
 from typing import Optional
-
+from strings import mac_addresses_list
 
 class Network:
     def __init__(self):
@@ -31,7 +31,18 @@ class Network:
                 ...
         return open_ports
 
+    def mac_address_lookup(self, mac: str):
+        mac = mac.upper().replace(':', '')
+        if len(mac) == 6:
+            try:
+                return mac_addresses_list[mac.strip()]
+            except:
+                return ''
+        elif len(mac) < 6:
+            raise KeyError('Invalid mac address')
+        else:
+            try:
+                return mac_addresses_list[mac[:6].strip()]
+            except:
+                return ''
 
-# a = Network()
-
-# print(a.port_scanner('185.188.104.10', ports=[53, 80, 179, 225, 443]))

@@ -15,28 +15,6 @@ class Encryptor:
     def text_encrypt(self, words: str, encode: Optional[str] = None, hash_method: str = 'MD5', **kwargs: str):
         """
         function to return encrypted string.
-        
-        args:
-
-            * words: your words to hash
-            
-            `text_encrypt(words = "hello world")`
-            
-            * encode: your choose to encode(default=None)
-            
-            `text_encrypt(words = "hello world", encode = "UTF-8")`
-            
-            * hash_method: your chosen hash method(default=md5)
-            
-            `text_encrypt(words = "hello world", hash_method = "SHA1")`
-            
-            `Available Hash Method's : ['MD5', 'SHA1', 'SHA224', 'SHA256', 'SHA384', 'SHA512', 'SHA3-224', 'SHA3-256', 'SHA3-384', 'SHA3-512', 'SHAKE128', 'SHAKE256', 'BASE16', 'BASE32', 'BASE64', 'BASE85', 'ASCII85', 'CAESAR']`
-
-            * count: for 'SHAKE128', 'SHAKE256' and 'CAESAR' method's(default for shake methods = 15 AND default for caesar method = 1)
-            
-            `text_encrypt(words = "hello world", hash_method = 'SHAKE128', count = 22)`
-            
-            `text_encrypt(words = "hello world", hash_method = 'CAESAR', count = 4)`
         """
 
         hash_method = hash_method.lower()
