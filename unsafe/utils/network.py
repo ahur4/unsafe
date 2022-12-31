@@ -1,7 +1,7 @@
 import socket
 from threading import Thread
 from typing import Optional
-from strings import mac_addresses_list
+from unsafe.utils.strings import mac_addresses_list
 
 class Network:
     def __init__(self):
