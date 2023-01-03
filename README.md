@@ -215,6 +215,7 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
         result = unsafe.sql_injection_scanner(url="https://example.com/news.php?id=475433")
         print(result) # Output : ["https://example.com/news.php?id=245", "......", ..]
     ```
+---
 - #### Crawling.
     - **Crawling a single Page and Extract Usernames, Phones, Emails and ...**
     ```python
