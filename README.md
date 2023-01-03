@@ -4,7 +4,7 @@
 ![Downloads](https://static.pepy.tech/personalized-badge/unsafe?period=week&units=none&left_color=grey&right_color=blue&left_text=Downloads)
 ![GitHub repo size](https://img.shields.io/github/repo-size/ahur4/unsafe?label=size)
 ![PyPI - License](https://img.shields.io/pypi/l/unsafe)
-![Telegram-Channel](https://ExploitPriv8)
+[![Telegram-Channel](https://img.shields.io/badge/Telegram--Channel-ExploitPriv8-blue)](https://t.me/ExploitPriv8)
 # Unsafe (Advanced Penetration Testing Module)
 An Advanced Module for Penetration Testing.
 Using This Module, You Can Implement Brute Force Operations and Identification and Anonymity.
