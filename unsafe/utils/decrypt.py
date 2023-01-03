@@ -3,6 +3,7 @@ from unsafe.utils.encrypt import Encryptor
 from unsafe.utils.strings import wordlist
 from typing import Optional, Union
 
+
 class Decrypter:
     """
     This is abc Class for Text/File Decryption.

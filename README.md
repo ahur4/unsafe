@@ -1,5 +1,11 @@
 ![PyPI](https://img.shields.io/pypi/v/unsafe)
-# Unsafe (Advanced Pentesting Module)
+![Downloads](https://static.pepy.tech/personalized-badge/unsafe?period=total&units=none&left_color=grey&right_color=blue&left_text=Downloads)
+![Downloads](https://static.pepy.tech/personalized-badge/unsafe?period=month&units=none&left_color=grey&right_color=blue&left_text=Downloads)
+![Downloads](https://static.pepy.tech/personalized-badge/unsafe?period=week&units=none&left_color=grey&right_color=blue&left_text=Downloads)
+![GitHub repo size](https://img.shields.io/github/repo-size/ahur4/unsafe?label=size)
+![PyPI - License](https://img.shields.io/pypi/l/unsafe)
+![Telegram-Channel](https://ExploitPriv8)
+# Unsafe (Advanced Penetration Testing Module)
 An Advanced Module for Penetration Testing.
 Using This Module, You Can Implement Brute Force Operations and Identification and Anonymity.
 This Module is Always Being Developed and There is No Need to Worry About it Becoming Unavailable.
@@ -10,17 +16,18 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
 
 
 # Features
-- [x] [Encrypt and Decrypt Hashs and Encodes](https://github.com/ahur4/unsafe#encrypt-and-decrypt-hashs-and-encodes)
-- [x] [Collecting Proxies and Check Their Health](https://github.com/ahur4/unsafe#collecting-proxies-and-check-their-health)
-- [x] [BruteForcing Part for Find Admin Panel or FileManager or CloudFlare Bypassing ...](https://github.com/ahur4/unsafe#bruteforcing-part-for-find-admin-panel-or-filemanager-or-cloudflare-bypassing)
-- [x] [Show, Delete and Edit Exif Metadata of Image](https://github.com/ahur4/unsafe#show-delete-and-edit-exif-metadata-of-image)
+- [x] [Encryption & Decryption](https://github.com/ahur4/unsafe#usage)
+- [x] [Proxy](https://github.com/ahur4/unsafe#proxy)
+- [x] [BruteForce](https://github.com/ahur4/unsafe#bruteforce)
+- [x] [Forensic](https://github.com/ahur4/unsafe#forensic)
 - [x] [Wordpress](https://github.com/ahur4/unsafe#wordpress)
+- [x] [VulnerabilityScanner](https://github.com/ahur4/unsafe#vulnerabilityscanner)
 - [x] [Crawling.](https://github.com/ahur4/unsafe#crawling)
 - [x] [Network.](https://github.com/ahur4/unsafe#network)
 
 
 # Usage
-- #### Encrypt and Decrypt Hashs and Encodes
+- #### Encryption & Decryption
     - **Available Methods:**
 
         ( md5 | sha1 | sha224 | sha256 | sha384 | sha512 | sha3-224 | sha3-256 \
@@ -63,7 +70,7 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
 
     ```
 ---
-- #### Collecting Proxies and Check Their Health.
+- #### Proxy
     - **Available Protocols** :
 
         (http | socks4 | socks5)
@@ -77,14 +84,11 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
     ```
     - **Proxy Checker Usage**
     ```python
-        from unsafe import Unsafe
-        unsafe = Unsafe()
-
         isActive = unsafe.proxy_checker(proxy_host='127.0.0.1', proxy_port='80', protocol='http', timeout=10)
         print(isActive) # Output : True|False
     ```
 ---
-- #### BruteForcing Part for Find Admin Panel or FileManager or CloudFlare Bypassing ...
+- #### BruteForce
     - **AdminFinder Usage**
     ```python
         from unsafe import Unsafe
@@ -101,9 +105,6 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
     ```
     - **FileManager Finder Usage**
     ```python
-        from unsafe import Unsafe
-        unsafe = Unsafe()
-
         filemanagers = unsafe.filemanager_finder(domain='example.com',
                                            workers=5, #Threads
                                            timeout=10,
@@ -114,9 +115,6 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
     ```
     - **CloudFlare Bypassing Usage**
     ```python
-        from unsafe import Unsafe
-        unsafe = Unsafe()
-
         realip = unsafe.cloudflare_bypasser(domain='google.com',
                                            workers=5, #Threads
                                         )
@@ -124,9 +122,6 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
     ```
     - **SubDomain Finder**
     ```python
-        from unsafe import Unsafe
-        unsafe = Unsafe()
-
         result = unsafe.subdomain_scanner(
             domain="google.com",
             workers=5,
@@ -137,30 +132,54 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
         print(result) # Output : ["ww1.google.com", ...]
     ```
 ---
-- #### Show, Delete and Edit Exif Metadata of Image.
-    - **Delete Metadata Usage**
+- #### Forensic.
+    - **Delete Image Metadata Usage**
     ```python
         from unsafe import Unsafe
         unsafe = Unsafe()
 
-        isDeleted = unsafe.delete_exif_img('/path/of/file.jpg')
+        isDeleted = unsafe.delete_exif_img(path='/path/of/file.jpg')
         print(isDeleted) # Output : True|False
     ```
-    - **Edit Metadata Usage**
+    - **Edit Image Metadata Usage**
     ```python
-        from unsafe import Unsafe
-        unsafe = Unsafe()
-
-        isEdited = unsafe.edit_exif_img('/path/of/file.jpg',key='model', value='unsafe')
+        isEdited = unsafe.edit_exif_img(path='/path/of/file.jpg',key='model', value='unsafe')
         print(isEdited) # Output : True|False
     ```
-    - **Extract Metadata Usage**
+    - **Extract Image Metadata Usage**
     ```python
-        from unsafe import Unsafe
-        unsafe = Unsafe()
-
-        Exifed = unsafe.extract_exif_img('/path/of/file.jpg')
+        Exifed = unsafe.extract_exif_img(path='/path/of/file.jpg')
         print(Exifed) # Output : {"make": "huawei", "model": "G-750", ...}
+    ```
+    - **Delete PDF Metadata Usage**
+    ```python
+        result = unsafe.remove_pdf_metadata(filename="path/of/file.pdf")
+        print(result) # Output : 'path/of/output.pdf'
+    ```
+    - **Edit PDF Metadata Usage**
+    ```python
+        result = unsafe.edit_pdf_metadata(filename="path/of/file.pdf", metadata={"unsafe":"module"})
+        print(result) # Output : 'path/of/output.pdf'
+    ```
+    - **Extract PDF Metadata Usage**
+    ```python
+        result = unsafe.get_pdf_metadata(filename="path/of/file.pdf")
+        print(result) # Output : {"/data":"values",...}
+    ```
+    - **Delete Audio Metadata Usage**
+    ```python
+        result = unsafe.remove_audio_metadata(filename="path/of/file.mp3")
+        print(result) # Output : 'path/of/output.mp3'
+    ```
+    - **Edit Audio Metadata Usage**
+    ```python
+        result = unsafe.edit_audio_metadata(filename="path/of/file.mp3", metadata={"artist": "Ahur4"})
+        print(result) # Output : 'path/of/output.mp3'
+    ```
+    - **Extract Audio Metadata Usage**
+    ```python
+        result = unsafe.get_audio_metadata(filename="path/of/file.mp3")
+        print(result) # Output : # Output : {"/data":"values",...}
     ```
 ---
 - #### Wordpress.
@@ -174,9 +193,6 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
     ```
     - **Plugin Scanner**
     ```python
-        from unsafe import Unsafe
-        unsafe = Unsafe()
-
         site_users = unsafe.wp_plugin_scanner(domain="wordpress.org",
                                               timeout=10,
                                               workers=5,
@@ -185,7 +201,20 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
         print(site_users) # Output : ['http://wordpress.org/wp-content/plugins/wordpress-seo/',....]
     ```
 ---
+- #### VulnerabilityScanner
+    - **Xss Vulnerability Scanner**
+    ```python
+        from unsafe import Unsafe
+        unsafe = Unsafe()
 
+        result = unsafe.xss_scanner(url="https://example.com/news.php", js_script="<Script>alert('hi')</scripT>")
+        print(result) # Output : {"is_vulnerable": is_vulnerable, "form_detail": form_details}
+    ```
+    - **SqlInjection Vulnerability Scanner**
+    ```python
+        result = unsafe.sql_injection_scanner(url="https://example.com/news.php?id=475433")
+        print(result) # Output : ["https://example.com/news.php?id=245", "......", ..]
+    ```
 - #### Crawling.
     - **Crawling a single Page and Extract Usernames, Phones, Emails and ...**
     ```python
@@ -197,18 +226,12 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
     ```
     - **Search in Three Search Engines: Google, Bing and Ask**
     ```python
-        from unsafe import Unsafe
-        unsafe = Unsafe()
-
         # Search a Username in Insatgram
         result = unsafe.browser_search(query='"username" site:insatgram.com', timeout=10, proxy="http://127.0.0.1:80")
         print(result) # Output : ['https://instagram.com/username', ....]
     ```
     - **Scan Entered Page and Detect Xss Vulnerability.**
     ```python
-        from unsafe import Unsafe
-        unsafe = Unsafe()
-
         result = unsafe.xss_scanner(url="https://xsslabs.com/xss-labs-1.php", js_script="<Script>alert('hi')</scripT>")
         print(result) # Output : {'is_vulnerable': True, 'form_detail': {'action': '#', 'method': 'get', 'inputs': [{'type': 'text', 'name': 'name', 'value': "<Script>alert('hi')</scripT>"}]}}
     ```
@@ -224,9 +247,6 @@ This Module is Always Being Developed and There is No Need to Worry About it Bec
     ```
     - **Mac Address Lookup(find owner of device company)**
     ```python
-        from unsafe import Unsafe
-        unsafe = Unsafe()
-
         result = unsafe.mac_address_lookup(mac="00:00:5e:00:53:af")
         print(result) #Output : "U.S. Department of Defense (IANA)"
     ```

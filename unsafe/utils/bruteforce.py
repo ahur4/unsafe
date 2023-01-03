@@ -5,7 +5,7 @@ from threading import Thread
 from queue import Queue
 from socket import gethostbyname
 from typing import Optional
-from zipfile import ZipFile
+# from zipfile import ZipFile
 from pathlib import Path
 
 
@@ -243,39 +243,6 @@ class BruteForcer:
             i.join()
         return self.subdomain_bypassed
 
-    def _crack_zip_handler(self, password: str, zip_file: ZipFile):
-        try:
-            zip_file.extractall(pwd=password)
-        except:
-            return False
-        return True
-
-    def _crack_zip(self, password_list: Queue, zip_path: Path):
-        zip_object = ZipFile(zip_path)
-        while not password_list.empty():
-            i = password_list.get()
-            if self._crack_zip_handler(password=i, zip_file=zip_object):
-                self.zip_password_founded.append(i)
-                for k in self.zip_threads:
-                    k._stop()
-            else:
-                password_list.task_done()
-                print(i)
-
-    def zip_cracker(self, zip_path: Path, password_list: Path = wordlist, workers: int = 3):
-        self.zip_threads.clear()
-        for i in password_list:
-            self.zip_cracker_queue.put(i)
-        for i in range(workers):
-            thread_ = Thread(target=self._crack_zip, args=(
-                self.zip_cracker_queue, zip_path))
-            thread_.setDaemon(True)
-            thread_.start()
-            self.zip_threads.append(thread_)
-        for i in self.zip_threads:
-            i.join()
-        return self.zip_password_founded
-
     def _send_req_subdomain_scanner(self, domain: str, subdomains: Queue, timeout: int = 5, proxy: Optional[str] = None):
         if "http://" in domain:
             domain = domain.replace("http://", "")
@@ -319,3 +286,35 @@ class BruteForcer:
             i.join()
         return self.subdomain_founded
 
+    # def _crack_zip_handler(self, password: str, zip_file: ZipFile):
+    #     try:
+    #         zip_file.extractall(pwd=password)
+    #     except:
+    #         return False
+    #     return True
+
+    # def _crack_zip(self, password_list: Queue, zip_path: Path):
+    #     zip_object = ZipFile(zip_path)
+    #     while not password_list.empty():
+    #         i = password_list.get()
+    #         if self._crack_zip_handler(password=i, zip_file=zip_object):
+    #             self.zip_password_founded.append(i)
+    #             for k in self.zip_threads:
+    #                 k._stop()
+    #         else:
+    #             password_list.task_done()
+    #             print(i)
+
+    # def zip_cracker(self, zip_path: Path, password_list: Path = wordlist, workers: int = 3):
+    #     self.zip_threads.clear()
+    #     for i in password_list:
+    #         self.zip_cracker_queue.put(i)
+    #     for i in range(workers):
+    #         thread_ = Thread(target=self._crack_zip, args=(
+    #             self.zip_cracker_queue, zip_path))
+    #         thread_.setDaemon(True)
+    #         thread_.start()
+    #         self.zip_threads.append(thread_)
+    #     for i in self.zip_threads:
+    #         i.join()
+    #     return self.zip_password_founded
