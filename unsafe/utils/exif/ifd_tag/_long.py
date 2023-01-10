@@ -1,10 +1,9 @@
 """IFD LONG tag structure parser module."""
 
-from exif.ifd_tag._base import Base as BaseIfdTag
+from ._base import Base as BaseIfdTag
 
 
 class Long(BaseIfdTag):
-
     """IFD LONG tag structure parser class."""
 
     def modify(self, value):

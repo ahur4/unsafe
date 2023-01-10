@@ -2,11 +2,10 @@
 
 from plum.str import StrX
 
-from exif.ifd_tag._base import Base as BaseIfdTag
+from ._base import Base as BaseIfdTag
 
 
 class ExifVersion(BaseIfdTag):
-
     """Custom ASCII tag (non-terminated) structure parser class for EXIF version tag."""
 
     def modify(self, value):  # pragma: no cover

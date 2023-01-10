@@ -3,9 +3,9 @@
 from plum.bigendian import uint8
 from plum.littleendian import uint8 as uint8_le
 
-from exif._constants import ATTRIBUTE_ID_MAP, GpsAltitudeRef
-from exif._datatypes import TiffByteOrder
-from exif.ifd_tag._base import Base as BaseIfdTag
+from unsafe.utils.exif._constants import ATTRIBUTE_ID_MAP, GpsAltitudeRef
+from unsafe.utils.exif._datatypes import TiffByteOrder
+from ._base import Base as BaseIfdTag
 
 
 class Byte(BaseIfdTag):

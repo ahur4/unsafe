@@ -1,10 +1,9 @@
 """Base IFD tag structure parser module."""
 
-from exif._datatypes import IfdTag, IfdTagLe, TiffByteOrder
+from unsafe.utils.exif._datatypes import IfdTag, IfdTagLe, TiffByteOrder
 
 
 class Base:
-
     """Base IFD tag structure parser class."""
 
     def __init__(self, tag_offset, app1_ref):

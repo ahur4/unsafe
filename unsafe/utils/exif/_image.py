@@ -7,9 +7,9 @@ from typing import Any, BinaryIO, Dict, List, Union
 
 from plum.bigendian import uint16
 
-from exif._constants import ATTRIBUTE_ID_MAP, ExifMarkers
-from exif._app1_create import generate_empty_app1_bytes
-from exif._app1_metadata import App1MetaData
+from ._constants import ATTRIBUTE_ID_MAP, ExifMarkers
+from ._app1_create import generate_empty_app1_bytes
+from ._app1_metadata import App1MetaData
 
 logger = logging.getLogger(__name__)
 

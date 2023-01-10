@@ -12,7 +12,8 @@ class Decrypter:
     def __init__(self) -> None:
         ...
 
-    def text_decrypt(self, hash: Optional[str | bytes], word: Optional[str | list] = wordlist, encode: Optional[str] = None, hash_method: str = "MD5", **kwargs) -> Union[str, bytes]:
+    def text_decrypt(self, hash: Optional[str | bytes], word: Optional[str | list] = wordlist,
+                     encode: Optional[str] = None, hash_method: str = "MD5", **kwargs) -> Union[str, bytes]:
         """
         function to return encrypted string.
         """

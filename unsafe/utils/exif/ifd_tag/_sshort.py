@@ -3,13 +3,12 @@
 from plum.bigendian import sint16
 from plum.littleendian import sint16 as sint16_le
 
-from exif._datatypes import TiffByteOrder
-from exif.ifd_tag._short import Short
-from exif.ifd_tag._base import Base as BaseIfdTag
+from unsafe.utils.exif._datatypes import TiffByteOrder
+from ._short import Short
+from ._base import Base as BaseIfdTag
 
 
 class Sshort(BaseIfdTag):
-
     """IFD SHORT tag structure parser class."""
 
     ENUMS_MAP = Short.ENUMS_MAP

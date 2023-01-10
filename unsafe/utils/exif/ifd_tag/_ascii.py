@@ -9,8 +9,8 @@ from plum.littleendian import uint32 as uint32_le
 from plum.str import StrX
 from plum.utilities import getbytes
 
-from exif._datatypes import TiffByteOrder
-from exif.ifd_tag._base import Base as BaseIfdTag
+from unsafe.utils.exif._datatypes import TiffByteOrder
+from ._base import Base as BaseIfdTag
 
 ascii_str = StrX(encoding="ascii", name="ascii_str")
 ascii_zero_term_str = StrX(
@@ -40,7 +40,7 @@ class Ascii(BaseIfdTag):
 
         """
         if (
-            len(value) > self.tag_view.value_count - 1
+                len(value) > self.tag_view.value_count - 1
         ):  # subtract 1 to account for null termination character
             raise ValueError("string must be no longer than original")
 
@@ -61,10 +61,10 @@ class Ascii(BaseIfdTag):
                 # Wipe existing value at pointer-specified offset.
                 ascii_str_bytes = bytearray(b"\x00" * self.tag_view.value_count)
                 ascii_replace_stop_index = (
-                    self.tag_view.value_offset + self.tag_view.value_count
+                        self.tag_view.value_offset + self.tag_view.value_count
                 )
                 self._app1_ref.body_bytes[
-                    self.tag_view.value_offset : ascii_replace_stop_index
+                self.tag_view.value_offset: ascii_replace_stop_index
                 ] = ascii_str_bytes
 
                 # Generate intra-IFD tag bytes.
@@ -74,14 +74,14 @@ class Ascii(BaseIfdTag):
             else:  # modify existing ASCII string at offset
                 ascii_str_bytes = ifd_tag_str_target.pack(value)
                 ascii_replace_stop_index = (
-                    self.tag_view.value_offset + self.tag_view.value_count
+                        self.tag_view.value_offset + self.tag_view.value_count
                 )
                 self._app1_ref.body_bytes[
-                    self.tag_view.value_offset : ascii_replace_stop_index
+                self.tag_view.value_offset: ascii_replace_stop_index
                 ] = ascii_str_bytes
 
         self.tag_view.value_count = (
-            len(value) + 1
+                len(value) + 1
         )  # add 1 to account for null termination character
 
     def read(self):
@@ -116,7 +116,7 @@ class Ascii(BaseIfdTag):
         except UnpackError:
             value_bytes_no_null_terms = value_bytes.rstrip(b"\x00")
             excess_null_bytes_in_tag = (
-                len(value_bytes) - len(value_bytes_no_null_terms) - 1
+                    len(value_bytes) - len(value_bytes_no_null_terms) - 1
             )  # -1 for orig. null term.
 
             warnings.warn(
@@ -135,5 +135,5 @@ class Ascii(BaseIfdTag):
             start_index = self.tag_view.value_offset
             stop_index = start_index + self.tag_view.value_count
             self._app1_ref.body_bytes[start_index:stop_index] = (
-                b"\x00" * self.tag_view.value_count
+                    b"\x00" * self.tag_view.value_count
             )

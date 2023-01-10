@@ -2,8 +2,8 @@
 
 from plum.bigendian import uint16
 
-from exif._constants import ATTRIBUTE_ID_MAP, ExifMarkers
-from exif._datatypes import ExifType, Ifd, IfdTag, TiffByteOrder, TiffHeader
+from ._constants import ATTRIBUTE_ID_MAP, ExifMarkers
+from ._datatypes import ExifType, Ifd, IfdTag, TiffByteOrder, TiffHeader
 
 HEADER_BYTES_EXCLUDED_FROM_LENGTH = (
     2  # IMPORTANT: APP1 marker is excluded from the length of field.
@@ -50,7 +50,7 @@ def generate_empty_app1_bytes():
     # pylint: disable=unsubscriptable-object
     ifd0.tags[0].value_offset = tiff_header.nbytes + ifd0.nbytes  # IFD 0 --> EXIF
     ifd0.tags[1].value_offset = (
-        tiff_header.nbytes + ifd0.nbytes + exif_ifd.nbytes
+            tiff_header.nbytes + ifd0.nbytes + exif_ifd.nbytes
     )  # IFD 0 --> GPS
     # pylint: enable=unsubscriptable-object
 

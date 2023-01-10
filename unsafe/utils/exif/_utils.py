@@ -1,7 +1,7 @@
 """Utility functions."""
 
-from exif._constants import ATTRIBUTE_ID_MAP
-from exif._datatypes import ExifType
+from ._constants import ATTRIBUTE_ID_MAP
+from ._datatypes import ExifType
 
 
 def pack_into(datatype, buffer, offset=0):

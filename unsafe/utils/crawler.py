@@ -2,8 +2,6 @@ import requests
 from bs4 import BeautifulSoup as bs
 from urllib.parse import urlparse, parse_qs, urljoin
 from typing import Optional
-# from unsafe.utils.strings import ua
-# import json
 import random
 import string
 import re
@@ -60,7 +58,7 @@ class Crawler:
                 pass
         ######################
         if "There are no results for" not in bing.text:
-            soup = bs(bing.text,  "html.parser")
+            soup = bs(bing.text, "html.parser")
             try:
                 anchors = soup.find(id='b_results').findAll("a")
                 for i in anchors:
@@ -68,7 +66,7 @@ class Crawler:
             except:
                 ...
         ######################
-        soup = bs(ask.text,  "html.parser")
+        soup = bs(ask.text, "html.parser")
         try:
             anchors = soup.find(
                 attrs={"class": "PartialSearchResults-results"}).findAll("a")
@@ -85,7 +83,8 @@ class Crawler:
         for i in source.split('\n'):
             try:
                 regexed = re.search(
-                    r"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)", i)
+                    r"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)",
+                    i)
                 if regexed:
                     before_result.append(regexed)
             except:

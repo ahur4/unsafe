@@ -3,11 +3,10 @@
 from plum.dump import Record
 from plum.utilities import getbytes
 
-from exif.ifd_tag._base import Base as BaseIfdTag
+from ._base import Base as BaseIfdTag
 
 
 class WindowsXp(BaseIfdTag):
-
     """Legacy Windows XP style tag structure parser class."""
 
     def modify(self, value):  # pragma: no cover

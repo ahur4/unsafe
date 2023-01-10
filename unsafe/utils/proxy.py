@@ -30,14 +30,14 @@ class Proxy:
         ```
         """
         if protocol.lower() in ["http", "socks5", "socks4"]:
-            #Send Request
+            # Send Request
             req = requests.get(
                 f'https://www.freeproxy.world/?type={protocol}&anonymity=&country=&speed={max_ping}&port=&page=1')
 
-            #Create Object and Select Parser Type
+            # Create Object and Select Parser Type
             soup = BeautifulSoup(req.text, 'html.parser')
 
-            #Find All Proxy IP's and Port's
+            # Find All Proxy IP's and Port's
             ips = soup.find_all('td', class_='show-ip-div')
             ports = soup.find_all('a')
 
@@ -53,7 +53,7 @@ class Proxy:
                 except:
                     ...
 
-            #Ordering Proxies
+            # Ordering Proxies
             proxy_list = dict(zip(list_ip, list_port))
 
             return proxy_list
@@ -84,7 +84,7 @@ class Proxy:
                 requests.get(
                     "http://www.google.com",
                     proxies={protocol: "http://" +
-                             str(proxy_host) + ":" + str(proxy_port)},
+                                       str(proxy_host) + ":" + str(proxy_port)},
                     timeout=timeout,
                 )
                 proxy_status = True

@@ -3,7 +3,7 @@
 from plum.bigendian import uint16
 from plum.littleendian import uint16 as uint16_le
 
-from exif._constants import (
+from unsafe.utils.exif._constants import (
     ATTRIBUTE_ID_MAP,
     ColorSpace,
     ExposureMode,
@@ -18,12 +18,11 @@ from exif._constants import (
     Sharpness,
     WhiteBalance,
 )
-from exif._datatypes import Flash, TiffByteOrder
-from exif.ifd_tag._base import Base as BaseIfdTag
+from unsafe.utils.exif._datatypes import Flash, TiffByteOrder
+from ._base import Base as BaseIfdTag
 
 
 class Short(BaseIfdTag):
-
     """IFD SHORT tag structure parser class."""
 
     CUSTOM_TYPES_MAP = {

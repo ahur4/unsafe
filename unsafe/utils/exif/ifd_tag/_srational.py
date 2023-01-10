@@ -6,12 +6,11 @@ from plum.bigendian import sint32
 from plum.littleendian import sint32 as sint32_le
 from plum.structure import member, Structure
 
-from exif._datatypes import TiffByteOrder
-from exif.ifd_tag._base import Base as BaseIfdTag
+from unsafe.utils.exif._datatypes import TiffByteOrder
+from ._base import Base as BaseIfdTag
 
 
 class SrationalDtype(Structure):
-
     """SRATIONAL Datatype"""
 
     numerator: int = member(fmt=sint32)
@@ -19,7 +18,6 @@ class SrationalDtype(Structure):
 
 
 class SrationalDtypeLe(Structure):
-
     """SRATIONAL Datatype (Little Endian)"""
 
     numerator: int = member(fmt=sint32_le)
@@ -27,7 +25,6 @@ class SrationalDtypeLe(Structure):
 
 
 class Srational(BaseIfdTag):
-
     """IFD SRATIONAL tag structure parser class."""
 
     def __init__(self, tag_offset, app1_ref):
@@ -54,8 +51,8 @@ class Srational(BaseIfdTag):
 
         for rational_index in range(int(self.tag_view.value_count)):
             current_offset = (
-                int(self.tag_view.value_offset)
-                + rational_index * self.srational_dtype_cls.nbytes
+                    int(self.tag_view.value_offset)
+                    + rational_index * self.srational_dtype_cls.nbytes
             )
             rational_view = self.srational_dtype_cls.view(
                 self._app1_ref.body_bytes, current_offset
@@ -81,8 +78,8 @@ class Srational(BaseIfdTag):
 
         for rational_index in range(int(self.tag_view.value_count)):
             current_offset = (
-                int(self.tag_view.value_offset)
-                + rational_index * self.srational_dtype_cls.nbytes
+                    int(self.tag_view.value_offset)
+                    + rational_index * self.srational_dtype_cls.nbytes
             )
             rational_view = self.srational_dtype_cls.view(
                 self._app1_ref.body_bytes, current_offset
@@ -105,8 +102,8 @@ class Srational(BaseIfdTag):
         """Wipe value pointer target bytes to null."""
         for rational_index in range(int(self.tag_view.value_count)):
             current_offset = (
-                int(self.tag_view.value_offset)
-                + rational_index * self.srational_dtype_cls.nbytes
+                    int(self.tag_view.value_offset)
+                    + rational_index * self.srational_dtype_cls.nbytes
             )
             rational_view = self.srational_dtype_cls.view(
                 self._app1_ref.body_bytes, current_offset

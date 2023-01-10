@@ -3,6 +3,7 @@ from threading import Thread
 from typing import Optional
 from unsafe.utils.strings import mac_addresses_list
 
+
 class Network:
     def __init__(self):
         ...
@@ -45,4 +46,3 @@ class Network:
                 return mac_addresses_list[mac[:6].strip()]
             except:
                 return ''
-

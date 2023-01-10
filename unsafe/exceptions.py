@@ -25,7 +25,8 @@ class NotWordpress(Exception):
 class SiteNotFound(Exception):
     """This Error Raising When The Program cant Connect to Your Target Website."""
 
-    def __init__(self, url: str, message: str = 'The Program cant Connect to Your Target Website or Entered Domain is Not Found.'):
+    def __init__(self, url: str,
+                 message: str = 'The Program cant Connect to Your Target Website or Entered Domain is Not Found.'):
         self.url = url
         self.message = message
         super().__init__(self.url, self.message)
