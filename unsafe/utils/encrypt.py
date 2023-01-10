@@ -12,7 +12,7 @@ class Encryptor:
     def __init__(self) -> None:
         ...
 
-    def text_encrypt(self, words: str, encode: Optional[str] = None, hash_method: str = 'MD5', **kwargs: str):
+    def text_encrypt(self, words: str, encode: Optional[str] = None, hash_method: str = 'MD5', **kwargs):
         """
         function to return encrypted string.
         """
@@ -123,7 +123,7 @@ class Encryptor:
             raise ValueError('This Hash Method Not Available !')
 
     def file_encrypt(self, filename: str, encode: Optional[str] = None, hash_method: str = 'MD5',
-                     **kwargs: dict[str, int]):
+                     **kwargs):
         """
         function to return encrypted string.
         
