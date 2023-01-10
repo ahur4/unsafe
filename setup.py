@@ -41,7 +41,7 @@ setup(
     python_requires=">=3.8",
     include_package_data=True,
     classifiers=[
-        'Development Status :: 5 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
@@ -57,14 +57,6 @@ setup(
         'Topic :: Security',
         'Topic :: Security :: Cryptography',
         'Topic :: Internet',
-        'Topic :: Hack',
-        'Topic :: Hacking',
-        'Topic :: Osint',
-        'Topic :: Forensic',
-        'Topic :: Cryptography',
-        'Topic :: Peneration',
-        'Topic :: Crawler',
-        'Topic :: Scanner',
         'Topic :: Software Development :: Libraries',
         'Topic :: Software Development :: Libraries :: Python Modules'
     ]
