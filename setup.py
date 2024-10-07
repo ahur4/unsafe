@@ -19,11 +19,9 @@ requirements = [
 
 setup(
     name='unsafe',
-    version='1.2.70',
+    version='1.3',
     author='Ahura Rahmani',
     author_email='ahur4.rahmani@gmail.com',
-    maintainer='Masoud Nayebi',
-    maintainer_email='mesut@gmail.com',
     license='MIT',
     url='https://github.com/ahur4/unsafe',
     install_requires=requirements,
@@ -31,7 +29,7 @@ setup(
         'hack', 'hack-module', 'pentest', 'unsafe', 'osint',
         'osint-python', 'hacking-python', 'cryptography', 'vulnerability-scanner', 'vulnerability', 'security',
         'hacker', 'admin-finder', 'wordpress-scanner', 'instagram-osint', 'cve', 'proxy-wrapper', 'proxy-checker',
-        'ssh-connect', 'hydra', 'cracker', 'sqlmap', 'ahur4', 'mesutfd', 'crawler', 'acunetix'
+        'ssh-connect', 'hydra', 'cracker', 'sqlmap', 'ahur4', 'mesutfd', 'web', 'acunetix'
     ],
     description='A practical and optimal library for those interested in Pentest, cryptography,Vulnerability Scanner and ..',
     long_description=long_description,
@@ -41,16 +39,11 @@ setup(
     python_requires=">=3.8",
     include_package_data=True,
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
-        'Natural Language :: English',
         'Operating System :: POSIX :: Linux',
         'Operating System :: MacOS',
         'Operating System :: Microsoft :: Windows',
-        'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
