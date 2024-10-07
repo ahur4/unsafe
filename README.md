@@ -12,7 +12,10 @@ Aiming to become the best package available for hacking and security in Python.
 - Author : Ahur4
   - [Telegram Channel](https://t.me/Ahura_Rahmani)
   - [Telegram Pv](https://t.me/Ahur4)
-
+# Installation
+```bash
+pip install unsafe
+```
 # Features
 
 - [x] **BruteForce**
