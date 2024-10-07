@@ -9,7 +9,7 @@ from plum.littleendian import uint32 as uint32_le
 from plum.str import StrX
 from plum.utilities import getbytes
 
-from unsafe.ext.exif._datatypes import TiffByteOrder
+from unsafe.ext.forensic.exif import TiffByteOrder
 from ._base import Base as BaseIfdTag
 
 ascii_str = StrX(encoding="ascii", name="ascii_str")

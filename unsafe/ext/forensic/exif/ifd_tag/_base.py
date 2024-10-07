@@ -1,6 +1,6 @@
 """Base IFD tag structure parser module."""
 
-from unsafe.ext.exif._datatypes import IfdTag, IfdTagLe, TiffByteOrder
+from unsafe.ext.forensic.exif import IfdTag, IfdTagLe, TiffByteOrder
 
 
 class Base:

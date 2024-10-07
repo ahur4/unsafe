@@ -3,7 +3,7 @@
 from plum.bigendian import uint16
 from plum.littleendian import uint16 as uint16_le
 
-from unsafe.ext.exif._constants import (
+from unsafe.ext.forensic.exif import (
     ATTRIBUTE_ID_MAP,
     ColorSpace,
     ExposureMode,
@@ -18,7 +18,7 @@ from unsafe.ext.exif._constants import (
     Sharpness,
     WhiteBalance,
 )
-from unsafe.ext.exif._datatypes import Flash, TiffByteOrder
+from unsafe.ext.forensic.exif import Flash, TiffByteOrder
 from ._base import Base as BaseIfdTag
 
 

@@ -6,7 +6,7 @@ from plum.bigendian import sint32
 from plum.littleendian import sint32 as sint32_le
 from plum.structure import member, Structure
 
-from unsafe.ext.exif._datatypes import TiffByteOrder
+from unsafe.ext.forensic.exif import TiffByteOrder
 from ._base import Base as BaseIfdTag
 
 

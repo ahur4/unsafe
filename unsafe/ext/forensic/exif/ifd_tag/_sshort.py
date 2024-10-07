@@ -3,7 +3,7 @@
 from plum.bigendian import sint16
 from plum.littleendian import sint16 as sint16_le
 
-from unsafe.ext.exif._datatypes import TiffByteOrder
+from unsafe.ext.forensic.exif import TiffByteOrder
 from ._short import Short
 from ._base import Base as BaseIfdTag
 

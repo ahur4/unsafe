@@ -3,8 +3,8 @@
 from plum.bigendian import uint8
 from plum.littleendian import uint8 as uint8_le
 
-from unsafe.ext.exif._constants import ATTRIBUTE_ID_MAP, GpsAltitudeRef
-from unsafe.ext.exif._datatypes import TiffByteOrder
+from unsafe.ext.forensic.exif import ATTRIBUTE_ID_MAP, GpsAltitudeRef
+from unsafe.ext.forensic.exif import TiffByteOrder
 from ._base import Base as BaseIfdTag
 
 

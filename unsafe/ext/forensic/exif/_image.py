@@ -151,7 +151,7 @@ class Image:
                     try:
                         delattr(self, tag)
                     except AttributeError:
-                        warnings.warn("could not delete tag " + tag, RuntimeWarning)
+                        ...
 
             self._parse_segments(self.get_file())
 
@@ -230,7 +230,7 @@ class Image:
 
     @property
     def has_exif(self) -> bool:
-        """Report whether or not the image currently has EXIF metadata."""
+        """Report whether the image currently has EXIF metadata."""
         return self._has_exif
 
     def list_all(self) -> List[str]:
