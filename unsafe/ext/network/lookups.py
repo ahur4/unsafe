@@ -25,7 +25,3 @@ def mac_address_lookup(mac: str) -> Optional[str]:
 
     # Return the vendor name if found, otherwise empty string
     return mac_addresses_list.get(mac_prefix, "")
-
-
-if __name__ == '__main__':
-    print(mac_address_lookup(mac="00-05-9A-3C-7A-00"))

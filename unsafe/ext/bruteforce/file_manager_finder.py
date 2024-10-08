@@ -95,12 +95,3 @@ def file_manager_finder(
             if res is not None:
                 complete_result += res
         return complete_result
-
-
-if __name__ == "__main__":
-    print(file_manager_finder("lacasadepinturas.com"))
-    # output :
-    # [
-    #     'https://lacasadepinturas.com/js/filemanager/index.html',
-    #     'https://lacasadepinturas.com/js/Filemanager/index.html'
-    # ]

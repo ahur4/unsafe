@@ -59,15 +59,3 @@ def cloud_bypasser(domain: str, subdomains: list = subdomain, worker: int = 5) -
                 complete_result.update(res)
         return complete_result
 
-
-if __name__ == "__main__":
-    print(cloud_bypasser("sabzlearn.ir"))
-    # output :
-    # {
-    #     'www.sabzlearn.ir': '136.243.61.121', 'mail.sabzlearn.ir': '136.243.61.121',
-    #     'chat.sabzlearn.ir': '80.249.115.108', 'status.sabzlearn.ir': '185.73.226.51',
-    #     'tech.sabzlearn.ir': '80.249.115.193', 'webmail.sabzlearn.ir': '136.243.61.121',
-    #     'files.sabzlearn.ir': '185.78.22.52', 'up.sabzlearn.ir': '80.249.115.194',
-    #     'dl.sabzlearn.ir': '185.78.22.52', 'beta.sabzlearn.ir': '185.143.233.120',
-    #     'erp.sabzlearn.ir': '185.18.215.17'
-    # }

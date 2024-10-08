@@ -1,8 +1,11 @@
-from typing import Optional
-import requests
-from unsafe.strings.wordpress import wp_plugins
-from queue import Queue
 import concurrent.futures
+from queue import Queue
+from typing import Optional
+
+import requests
+
+from unsafe.strings.wordpress import wp_plugins
+
 
 def protocol_cleaner(domain: str) -> str:
     """Cleans the protocol from the domain URL, ensuring no 'http://' or 'https://'."""
@@ -10,7 +13,7 @@ def protocol_cleaner(domain: str) -> str:
 
 
 def _send_request(
-        domain: str, plugins_queue: Queue,  timeout: int = 10,
+        domain: str, plugins_queue: Queue, timeout: int = 10,
         proxy: Optional[str] = None
 ):
     results = []
@@ -25,6 +28,7 @@ def _send_request(
             results.append(data)
         plugins_queue.task_done()
     return results
+
 
 def plugin_scanner(
         domain: str, timeout: int = 10, proxy: Optional[str] = None, worker: int = 5
@@ -46,15 +50,3 @@ def plugin_scanner(
             if res is not None:
                 complete_result += res
         return complete_result
-
-
-if __name__ == '__main__':
-    print(plugin_scanner("schechtl.de"))
-    # output :
-    # [
-    #     'woocommerce', 'regenerate-thumbnails', 'wordpress-seo',
-    #     'simple-custom-post-order', 'wordfence', 'tinymce-advanced',
-    #     'duplicate-post', 'w3-total-cache', 'contact-form-7-honeypot',
-    #     'relevanssi', 'eps-301-redirects', 'contact-form-7',
-    #     'wp-mail-smtp', 'user-role-editor', 'flamingo'
-    # ]

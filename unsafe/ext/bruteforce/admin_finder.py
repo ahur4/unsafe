@@ -136,7 +136,3 @@ def admin_finder(
             if res is not None:
                 complete_result += res
         return complete_result
-
-
-if __name__ == "__main__":
-    print(admin_finder("portal.saorg.ir", random_agent=True))  # ['https://portal.saorg.ir/wp-login.php']
