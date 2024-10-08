@@ -33,7 +33,7 @@ pip install unsafe
   - [x] [CVE-2024-7313](https://nvd.nist.gov/vuln/detail/CVE-2024-7313)
   - [x] [CVE-2024-7339](https://nvd.nist.gov/vuln/detail/CVE-2024-7339)
   - [x] [CVE-2024-7928](https://nvd.nist.gov/vuln/detail/CVE-2024-7928)
-  - [x] Add more in future.
+  - [x] Add more in the future.
 - [x] Forensic
   - [x] Image Metadata
   - [x] PDF Metadata
