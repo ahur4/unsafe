@@ -90,8 +90,3 @@ def crawl_page(url: str, timeout: int = 10, proxy: Optional[str] = None) -> dict
         }
     except Exception:
         return {"links": [], "phones": [], "emails": [], "usernames": []}
-
-
-
-if __name__ == "__main__":
-    print(crawl_page("https://irancell.ir/p/1590/contact-us"))

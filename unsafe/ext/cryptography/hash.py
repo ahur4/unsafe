@@ -47,7 +47,3 @@ def shake128(text: str, length: int = 20) -> str:
 
 def shake256(text: str, length: int = 20) -> str:
     return hashlib.shake_256(text.encode('utf-8')).hexdigest(length)
-
-
-if __name__ == '__main__':
-    print(md5('hello'))

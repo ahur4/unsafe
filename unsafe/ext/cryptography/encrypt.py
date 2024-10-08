@@ -34,12 +34,3 @@ def base64(text: str) -> str:
 
 def base85(text: str) -> str:
     return b64.b85encode(text.encode()).decode()
-
-
-if __name__ == "__main__":
-    print(caesar(keyword="Ahur4 Rahmani", pointer=2))
-    print(ascii85(text="Ahur4 Rahmani"))
-    print(base16(text="Ahur4 Rahmani"))
-    print(base32(text="Ahur4 Rahmani"))
-    print(base64(text="Ahur4 Rahmani"))
-    print(base85(text="Ahur4 Rahmani"))

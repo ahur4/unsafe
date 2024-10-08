@@ -81,6 +81,3 @@ def hash_cracker(hashed: str, hash_type: HashTypes, pass_list: list = wordlist, 
             if res is not None:
                 return res
 
-
-if __name__ == '__main__':
-    print(hash_cracker(hashed="5d41402abc4b2a76b9719d911017c592", hash_type=HashTypes.MD5))
