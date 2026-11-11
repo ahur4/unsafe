@@ -13,18 +13,19 @@ version_match = re.search(
 if version_match is None:
     raise RuntimeError("unsafe/__version__.py is missing __version__")
 
-# Direct dependencies only. certifi and urllib3 are pinned to a safe floor
-# (urllib3 stays on the 1.26 line). Transitive packages such as charset-normalizer,
+# Direct dependencies only. Transitive packages such as charset-normalizer,
 # idna, and soupsieve are left for those libraries to select.
+# urllib3 1.26.20 is the last 1.26 release and is still vulnerable; the fixes
+# Snyk reports start at 2.8.0. pypdf replaces PyPDF2, which has no fixed release.
 requirements = [
     "beautifulsoup4>=4.12.3",
     "certifi>=2026.10.23",
     "mutagen>=1.47.0",
     "plum-py>=0.8.7",
-    "PyPDF2>=3.0.1",
+    "pypdf>=6.21.4",
     "PySocks>=1.7.1",
     "requests>=2.32.3,<3",
-    "urllib3>=1.26.20,<1.27",
+    "urllib3>=2.8.0,<3",
 ]
 
 setup(
@@ -51,7 +52,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(include=["unsafe", "unsafe.*"]),
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     include_package_data=True,
     classifiers=[
         "Intended Audience :: Developers",
@@ -59,7 +60,6 @@ setup(
         "Operating System :: POSIX :: Linux",
         "Operating System :: MacOS",
         "Operating System :: Microsoft :: Windows",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",

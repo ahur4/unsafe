@@ -42,8 +42,10 @@ def test_runtime_dependencies_drop_unused_and_pin_safe_floors():
     for dropped in ("pillow", "soupsieve", "charset-normalizer", "charset_normalizer", "idna"):
         assert dropped not in names
     blob = "\n".join(line.lower() for line in declared)
-    assert "urllib3>=1.26.20,<1.27" in blob
+    assert "urllib3>=2.8.0,<3" in blob
     assert "certifi>=2026.10.23" in blob
+    assert "pypdf" in names
+    assert "pypdf2" not in names
 
     names = []
     for requirement in requires("unsafe") or []:
@@ -51,7 +53,9 @@ def test_runtime_dependencies_drop_unused_and_pin_safe_floors():
             continue
         names.append(requirement.split(">=")[0].split("<")[0].strip().lower())
     assert "pillow" not in names
+    assert "pypdf2" not in names
     assert "urllib3" in names
+    assert "pypdf" in names
     assert "certifi" in names
     assert "requests" in names
 

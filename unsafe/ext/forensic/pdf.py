@@ -3,7 +3,7 @@ import os
 import time
 from typing import Dict, Optional
 
-from PyPDF2 import PdfReader, PdfWriter
+from pypdf import PdfReader, PdfWriter
 
 _output_ids = itertools.count()
 

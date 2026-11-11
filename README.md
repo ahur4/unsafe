@@ -8,7 +8,7 @@ Author: Ahur4
 
 ## Install
 
-Python 3.8 or newer.
+Python 3.9 or newer.
 
 ```bash
 pip install unsafe
@@ -28,12 +28,12 @@ Runtime dependencies:
 | Package | Constraint | Why it is here |
 | --- | --- | --- |
 | requests | `>=2.32.3,<3` | Imported by existing network and web modules |
-| urllib3 | `>=1.26.20,<1.27` | Safe 1.26 line. 2.x is intentionally not selected |
+| urllib3 | `>=2.8.0,<3` | 1.26.20 is the last 1.26 release and is still vulnerable |
 | certifi | `>=2026.10.23` | CA bundle used by requests |
 | beautifulsoup4 | `>=4.12.3` | Imported while the web modules load |
 | mutagen | `>=1.47.0` | Audio metadata |
 | plum-py | `>=0.8.7` | JPEG EXIF parser |
-| PyPDF2 | `>=3.0.1` | PDF metadata |
+| pypdf | `>=6.21.4` | PDF metadata. Replaces PyPDF2, which has no fixed release |
 | PySocks | `>=1.7.1` | SOCKS proxy URLs in the existing proxy helper |
 
 Pillow is not required. `charset-normalizer`, `idna`, and `soupsieve` are not pinned; the libraries above pull in compatible versions.
@@ -145,7 +145,7 @@ forensic.edit_image_metadata("photo.jpg", "image_description", "Hello")
 forensic.del_image_metadata("photo.jpg")
 ```
 
-PDF reads return a plain `dict` of strings such as `{ "/Title": "Hello" }`. A readable file with no info dictionary returns `{}`. A corrupt file or missing path returns `None` from `get_pdf_metadata`. `edit_pdf_metadata` and `del_pdf_metadata` write a new file under `output_PDF` next to the source. Keys may be passed with or without the leading slash. A missing source raises `FileNotFoundError`. PyPDF2 still writes its own `/Producer` entry.
+PDF reads return a plain `dict` of strings such as `{ "/Title": "Hello" }`. A readable file with no info dictionary returns `{}`. A corrupt file or missing path returns `None` from `get_pdf_metadata`. `edit_pdf_metadata` and `del_pdf_metadata` write a new file under `output_PDF` next to the source. Keys may be passed with or without the leading slash. A missing source raises `FileNotFoundError`. pypdf may still write its own `/Producer` entry.
 
 ```python
 from unsafe import forensic
@@ -209,7 +209,7 @@ pytest
 ruff check unsafe tests
 ```
 
-GitHub Actions (`.github/workflows/ci.yml`) runs Ruff on Python 3.12 and pytest on 3.8 through 3.12.
+GitHub Actions (`.github/workflows/ci.yml`) runs Ruff on Python 3.12 and pytest on 3.9 through 3.12.
 
 Ruff does not scan the unchanged brute-force, exploit, web, scanner, proxy, hash-cracker, EXIF-parser, or word-list sources. Those trees were left as they were so the lint job does not require editing them.
 

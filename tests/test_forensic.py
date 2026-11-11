@@ -6,7 +6,7 @@ import wave
 from pathlib import Path
 
 import pytest
-from PyPDF2 import PdfWriter
+from pypdf import PdfWriter
 
 from unsafe.ext.forensic.audio import (
     del_audio_metadata,

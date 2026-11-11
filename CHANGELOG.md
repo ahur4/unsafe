@@ -6,7 +6,8 @@ Maintenance release. Brute-force, exploit, bypass, hash-cracker, crawler, proxy,
 
 - Publish the version from `unsafe/__version__.py` and stop ignoring every warning on import.
 - Read `README.md` as UTF-8 during packaging, and install only the `unsafe` packages.
-- Upgrade `certifi` to at least 2026.10.23 and `urllib3` to 1.26.20, staying on the 1.26 line. Upgrade `requests` so those floors install cleanly.
+- Upgrade `certifi` to at least 2026.10.23 and `requests` so the HTTP stack installs cleanly. `urllib3` is `>=2.8.0,<3`. The last 1.26 release, 1.26.20, is still vulnerable, so the 1.26 line is not used.
+- Replace `PyPDF2` with `pypdf>=6.21.4`. PyPDF2 has no fixed release for its known issues. Minimum Python is 3.9 because that pypdf line requires it.
 - Drop the unused Pillow pin and stop pinning transitive packages (`charset-normalizer`, `idna`, `soupsieve`).
 - Add `unsafe.config.Options` for timeout, headers, proxies, concurrency, verbosity, output format, and retry settings.
 - Add `unsafe.http.request`, a standalone client with exponential backoff. It is not used by the existing feature modules. Only GET, HEAD, and OPTIONS are retried unless `retry_methods` says otherwise.
