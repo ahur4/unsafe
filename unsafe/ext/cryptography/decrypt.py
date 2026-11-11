@@ -2,7 +2,7 @@ import base64 as b64
 from string import ascii_uppercase, ascii_lowercase
 
 
-def caesar(keyword: str, pointer: int) -> str:
+def caesar(keyword: str, pointer: int = 5) -> str:
     if pointer not in range(1, 27):
         raise ValueError("the key must be an integer between: 1 and 26")
     _decoded = ""

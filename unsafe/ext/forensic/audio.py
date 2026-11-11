@@ -1,83 +1,165 @@
+"""Read and edit audio-file metadata.
+
+Edits are written to a copy next to the source file. The copy keeps the
+source extension. The original file is left unchanged.
+
+Success returns a pydantic model. A missing file raises ``FileNotFoundError``.
+A file that is not a recognized audio container raises ``ReadError``.
+"""
+
+from __future__ import annotations
+
+import itertools
 import os
+import shutil
 import time
-from typing import Dict, Optional
+from typing import Any, Dict, Mapping, Optional
 
 from mutagen import File
+from mutagen.id3 import ID3
+from pydantic import TypeAdapter
+
+from unsafe.errors import ReadError
+from unsafe.models import AudioMetadata, WrittenFile
+
+_output_ids = itertools.count()
+_STRING_MAP = TypeAdapter(Dict[str, str])
 
 
-def get_audio_metadata(filename: str) -> Optional[Dict[str, str]]:
-    """Extracts metadata from an audio file.
+def get_audio_metadata(filename: str) -> AudioMetadata:
+    """Return tags from an audio file.
 
-    Args:
-        filename (str): Path to the audio file.
-
-    Returns:
-        Optional[Dict[str, str]]: A dictionary containing the audio metadata, or None if an error occurs.
+    ID3 tags use common names such as ``title`` and ``artist`` when mutagen
+    knows that name. An audio file with no tags has empty ``entries``.
     """
+    audio = _open_audio(filename)
     try:
-        audio_file = File(filename, easy=False)
-        return {key: str(value) for key, value in audio_file.items()}
-    except Exception as e:
-        return None
+        return AudioMetadata(path=filename, entries=_read_tags(audio))
+    except ReadError:
+        raise
+    except Exception as exc:
+        raise ReadError(f"Could not read audio metadata from {filename}") from exc
 
 
-def del_audio_metadata(filename: str) -> Optional[str]:
-    """Removes metadata from an audio file and saves the result.
-
-    Args:
-        filename (str): Path to the audio file.
-
-    Returns:
-        Optional[str]: Path to the output file or None if an error occurs.
-    """
+def del_audio_metadata(filename: str) -> WrittenFile:
+    """Copy an audio file without its tags."""
     return _process_audio(filename, new_metadata=None)
 
 
-def edit_audio_metadata(filename: str, metadata: Dict[str, str]) -> Optional[str]:
-    """Edits the metadata of an audio file and saves the result.
+def edit_audio_metadata(filename: str, metadata: Mapping[str, str]) -> WrittenFile:
+    """Copy an audio file and set string metadata on the copy.
 
-    Args:
-        filename (str): Path to the audio file.
-        metadata (Dict[str, str]): Metadata to update.
-
-    Returns:
-        Optional[str]: Path to the output file or None if an error occurs.
+    ID3 files accept the usual easy names (``title``, ``artist``, ``album``,
+    and so on). An unknown name raises ``ValueError``.
     """
-    return _process_audio(filename, new_metadata=metadata)
+    checked = _STRING_MAP.validate_python(dict(metadata))
+    return _process_audio(filename, new_metadata=checked)
 
 
-def _process_audio(filename: str, new_metadata: Optional[Dict[str, str]]) -> Optional[str]:
-    """Processes an audio file by removing or updating its metadata.
-
-    Args:
-        filename (str): Path to the audio file.
-        new_metadata (Optional[Dict[str, str]]): New metadata to apply, or None to remove metadata.
-
-    Returns:
-        Optional[str]: Path to the output file or None if an error occurs.
-    """
+def _open_audio(filename: str) -> Any:
+    if not os.path.isfile(filename):
+        raise FileNotFoundError(filename)
     try:
-        audio_file = File(filename, easy=True)
+        audio = File(filename, easy=True)
+    except Exception as exc:
+        raise ReadError(f"Could not open audio file {filename}") from exc
+    if audio is None:
+        raise ReadError(f"Unrecognized audio file: {filename}")
+    return audio
 
-        # Remove or update metadata.
+
+def _process_audio(filename: str, new_metadata: Optional[Dict[str, str]]) -> WrittenFile:
+    """Copy ``filename`` and either clear or replace its tags."""
+    _open_audio(filename)
+    output_path = _output_path(filename)
+    try:
+        shutil.copy2(filename, output_path)
+        audio = File(output_path, easy=True)
+        if audio is None:
+            raise ReadError(f"Unrecognized audio file: {filename}")
         if new_metadata is None:
-            audio_file.delete()
+            audio.delete()
         else:
-            for key, value in new_metadata.items():
-                audio_file[key] = value
+            _apply_tags(audio, new_metadata)
+        audio.save()
+        return WrittenFile(path=output_path)
+    except Exception as exc:
+        if os.path.exists(output_path):
+            try:
+                os.remove(output_path)
+            except OSError:
+                pass
+        if isinstance(exc, (ReadError, ValueError)):
+            raise
+        raise ReadError(f"Could not write audio metadata for {filename}") from exc
 
-        # Create the output folder if it doesnt exist.
-        output_folder = "AUDIO_output"
-        os.makedirs(output_folder, exist_ok=True)
 
-        # Generate the output filename.
-        timestamp = str(int(time.time() * 1000))
-        output_filename = f"output_{timestamp}.mp3"
-        output_file_path = os.path.join(output_folder, output_filename)
+def _output_path(filename: str) -> str:
+    directory = os.path.dirname(os.path.abspath(filename))
+    output_folder = os.path.join(directory, "AUDIO_output")
+    os.makedirs(output_folder, exist_ok=True)
+    timestamp = str(int(time.time() * 1000))
+    suffix = os.path.splitext(filename)[1] or ".bin"
+    return os.path.join(output_folder, f"output_{timestamp}_{next(_output_ids)}{suffix}")
 
-        # Save the new audio file.
-        audio_file.save(output_file_path)
 
-        return output_file_path
-    except Exception as e:
-        return None
+def _read_tags(audio: Any) -> Dict[str, str]:
+    tags = getattr(audio, "tags", None)
+    if isinstance(tags, ID3):
+        return _easy_id3_values(tags)
+    values: Dict[str, str] = {}
+    for key, value in audio.items():
+        values[str(key)] = _stringify(value)
+    return values
+
+
+def _easy_id3_values(tags: ID3) -> Dict[str, str]:
+    from mutagen.easyid3 import EasyID3
+
+    found: Dict[str, str] = {}
+    getters = getattr(EasyID3, "Get", {})
+    for key, getter in getters.items():
+        if "*" in key:
+            continue
+        try:
+            found[key] = _stringify(getter(tags, key))
+        except KeyError:
+            continue
+    return found
+
+
+def _apply_tags(audio: Any, metadata: Mapping[str, Optional[str]]) -> None:
+    """Assign string tags, falling back to ID3 easy names when required."""
+    try:
+        for key, value in metadata.items():
+            audio[key] = "" if value is None else str(value)
+        return
+    except TypeError:
+        pass
+
+    from mutagen.easyid3 import EasyID3
+
+    if getattr(audio, "tags", None) is None:
+        audio.add_tags()
+    tags = audio.tags
+    if not isinstance(tags, ID3):
+        raise ValueError("string metadata is not supported for this audio format")
+    setters = getattr(EasyID3, "Set", {})
+    for key, value in metadata.items():
+        normalized = str(key).lower()
+        setter = setters.get(normalized)
+        if setter is None:
+            raise ValueError(f"unsupported metadata key: {key}")
+        text = "" if value is None else str(value)
+        setter(tags, normalized, [text])
+
+
+def _stringify(value: object) -> str:
+    if isinstance(value, (list, tuple)):
+        return ", ".join(_stringify(item) for item in value)
+    text = getattr(value, "text", None)
+    if isinstance(text, (list, tuple)):
+        return ", ".join(str(item) for item in text)
+    if text is not None:
+        return str(text)
+    return str(value)

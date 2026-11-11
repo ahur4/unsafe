@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+extend-exclude = [
+    "example",
+    "unsafe/ext/bruteforce",
+    "unsafe/ext/exploits",
+    "unsafe/ext/web",
+    "unsafe/ext/cryptography/hash_cracker.py",
+    "unsafe/ext/forensic/exif",
+    "unsafe/ext/network/proxy.py",
+    "unsafe/ext/network/scanners.py",
+    "unsafe/strings",
+]
+
+[tool.ruff.lint]
+select = ["E", "F"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+plugins = ["pydantic.mypy"]
+packages = ["unsafe"]
+exclude = [
+    "example/",
+    "unsafe/ext/bruteforce/",
+    "unsafe/ext/exploits/",
+    "unsafe/ext/web/",
+    "unsafe/ext/cryptography/hash_cracker.py",
+    "unsafe/ext/network/proxy.py",
+    "unsafe/ext/network/scanners.py",
+    "unsafe/ext/forensic/exif/",
+    "unsafe/strings/",
+]
+
+[[tool.mypy.overrides]]
+module = [
+    "unsafe.ext.bruteforce.*",
+    "unsafe.ext.exploits.*",
+    "unsafe.ext.web.*",
+    "unsafe.ext.cryptography.hash_cracker",
+    "unsafe.ext.network.proxy",
+    "unsafe.ext.network.scanners",
+    "unsafe.ext.forensic.exif.*",
+    "unsafe.strings.*",
+    "mutagen.*",
+    "bs4.*",
+]
+follow_imports = "skip"
+ignore_errors = true
