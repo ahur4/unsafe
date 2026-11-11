@@ -1,15 +1,14 @@
 from unsafe.strings.mac_addresses import mac_addresses_list
-from typing import Optional
 
 
-def mac_address_lookup(mac: str) -> Optional[str]:
-    """Looks up the vendor associated with a given MAC address prefix.
+def mac_address_lookup(mac: str) -> str:
+    """Look up the vendor for a MAC address prefix in the local table.
 
     Args:
-        mac (str): The MAC address to lookup.
+        mac: MAC address. Separators ``:`` and ``-`` are ignored.
 
     Returns:
-        Optional[str]: The vendor name if found, otherwise None.
+        The vendor name. Unknown prefixes return an empty string.
 
     Raises:
         KeyError: If the MAC address is invalid (too short).

@@ -11,7 +11,7 @@ def get_image_metadata(path: str) -> Dict[str, str]:
         path (str): The file path to the JPG image.
 
     Returns:
-        Dict[str, str]: A dictionary containing the image's EXIF metadata, or an empty dictionary if no EXIF data is found.
+        Dict[str, str]: EXIF metadata, or an empty dictionary when the file has none.
 
     Raises:
         ValueError: If the provided path is not a valid file.
@@ -22,8 +22,8 @@ def get_image_metadata(path: str) -> Dict[str, str]:
     try:
         with open(path, 'rb') as image_file:
             image = Image(image_file)
-    except Exception as e:
-        raise ValueError(f"Failed to open or process image file: {e}")
+    except Exception as exc:
+        raise ValueError(f"Failed to open or process image file: {exc}") from exc
 
     if not image.has_exif:
         return {}
@@ -65,7 +65,7 @@ def del_image_metadata(path: str) -> bool:
 
         return True
 
-    except Exception as e:
+    except Exception:
         return False
 
 
@@ -99,5 +99,5 @@ def edit_image_metadata(path: str, key: str, value: str) -> bool:
 
         return True
 
-    except Exception as e:
+    except Exception:
         return False

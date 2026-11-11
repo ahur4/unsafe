@@ -1,8 +1,11 @@
+import itertools
 import os
 import time
 from typing import Dict, Optional
 
 from PyPDF2 import PdfReader, PdfWriter
+
+_output_ids = itertools.count()
 
 
 def get_pdf_metadata(filename: str) -> Optional[Dict[str, str]]:
@@ -12,13 +15,19 @@ def get_pdf_metadata(filename: str) -> Optional[Dict[str, str]]:
         filename (str): Path to the PDF file.
 
     Returns:
-        Optional[Dict[str, str]]: A dictionary containing the PDF metadata, or None if an error occurs.
+        A plain dictionary of PDF info, ``{}`` when none is present, or None on error.
     """
     try:
         with open(filename, 'rb') as file:
             pdf = PdfReader(file)
-            return pdf.metadata
-    except Exception as e:
+            metadata = pdf.metadata
+        if not metadata:
+            return {}
+        return {
+            str(key): "" if value is None else str(value)
+            for key, value in metadata.items()
+        }
+    except Exception:
         return None
 
 
@@ -44,9 +53,16 @@ def edit_pdf_metadata(filename: str, metadata: Dict[str, str]) -> Optional[str]:
     Returns:
         Optional[str]: Path to the output PDF file or None if an error occurs.
     """
-    # Prefix metadata keys with '/'
-    formatted_metadata = {f"/{key}": value for key, value in metadata.items()}
+    formatted_metadata = {_metadata_key(key): value for key, value in metadata.items()}
     return _process_pdf(filename, new_metadata=formatted_metadata)
+
+
+def _metadata_key(key: str) -> str:
+    """Return a PDF name key, adding the leading slash when it is missing."""
+    text = str(key).strip()
+    if not text.startswith("/"):
+        text = f"/{text}"
+    return text
 
 
 def _process_pdf(filename: str, new_metadata: Dict[str, str]) -> Optional[str]:
@@ -75,7 +91,9 @@ def _process_pdf(filename: str, new_metadata: Dict[str, str]) -> Optional[str]:
             output_folder = os.path.join(os.path.dirname(filename), 'output_PDF')
             os.makedirs(output_folder, exist_ok=True)
             timestamp = str(int(time.time() * 1000))
-            output_file_path = os.path.join(output_folder, f'output_{timestamp}.pdf')
+            output_file_path = os.path.join(
+                output_folder, f'output_{timestamp}_{next(_output_ids)}.pdf'
+            )
 
             # Save the new PDF
             with open(output_file_path, 'wb') as output_file:
@@ -84,5 +102,5 @@ def _process_pdf(filename: str, new_metadata: Dict[str, str]) -> Optional[str]:
             return output_file_path
     except FileNotFoundError:
         raise
-    except Exception as e:
+    except Exception:
         return None
