@@ -18,8 +18,9 @@ OFFENSIVE = (
 
 
 def test_import_exposes_version_and_helpers():
-    assert unsafe.__version__ == "1.4.0"
-    assert version("unsafe") == "1.4.0"
+    assert unsafe.__version__ == "2.0.0"
+    assert version("unsafe") == "2.0.0"
+    assert (ROOT / "unsafe" / "py.typed").is_file()
     assert unsafe.config.get_options().timeout == 10.0
     assert callable(unsafe.http.request)
 
@@ -43,6 +44,8 @@ def test_runtime_dependencies_drop_unused_and_pin_safe_floors():
         assert dropped not in names
     blob = "\n".join(line.lower() for line in declared)
     assert "urllib3>=2.8.0,<3" in blob
+    assert "requests>=2.34.2,<3" in blob
+    assert "pydantic>=2.10" in blob
     assert "certifi>=2026.10.23" in blob
     assert "pypdf" in names
     assert "pypdf2" not in names
@@ -56,6 +59,7 @@ def test_runtime_dependencies_drop_unused_and_pin_safe_floors():
     assert "pypdf2" not in names
     assert "urllib3" in names
     assert "pypdf" in names
+    assert "pydantic" in names
     assert "certifi" in names
     assert "requests" in names
 

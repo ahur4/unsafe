@@ -1,60 +1,61 @@
+"""Read and edit PDF document info.
+
+Success always returns a pydantic model. A missing file raises
+``FileNotFoundError``. A file that cannot be parsed raises ``ReadError``.
+"""
+
+from __future__ import annotations
+
 import itertools
 import os
 import time
-from typing import Dict, Optional
+from typing import Dict, Mapping
 
+from pydantic import TypeAdapter
 from pypdf import PdfReader, PdfWriter
 
+from unsafe.errors import ReadError
+from unsafe.models import PdfMetadata, WrittenFile
+
 _output_ids = itertools.count()
+_STRING_MAP = TypeAdapter(Dict[str, str])
 
 
-def get_pdf_metadata(filename: str) -> Optional[Dict[str, str]]:
-    """Extracts metadata from a PDF file.
+def get_pdf_metadata(filename: str) -> PdfMetadata:
+    """Return the PDF info dictionary.
 
-    Args:
-        filename (str): Path to the PDF file.
-
-    Returns:
-        A plain dictionary of PDF info, ``{}`` when none is present, or None on error.
+    An info dictionary that is absent is an empty ``entries`` mapping, not
+    ``None``.
     """
+    _require_file(filename)
     try:
-        with open(filename, 'rb') as file:
-            pdf = PdfReader(file)
+        with open(filename, "rb") as handle:
+            pdf = PdfReader(handle)
             metadata = pdf.metadata
-        if not metadata:
-            return {}
-        return {
-            str(key): "" if value is None else str(value)
-            for key, value in metadata.items()
-        }
-    except Exception:
-        return None
+        entries: Dict[str, str] = {}
+        if metadata:
+            for key, value in metadata.items():
+                entries[str(key)] = "" if value is None else str(value)
+        return PdfMetadata(path=filename, entries=entries)
+    except ReadError:
+        raise
+    except Exception as exc:
+        raise ReadError(f"Could not read PDF metadata from {filename}") from exc
 
 
-def del_pdf_metadata(filename: str) -> Optional[str]:
-    """Removes metadata from a PDF and saves the output to a new file.
-
-    Args:
-        filename (str): Path to the PDF file.
-
-    Returns:
-        Optional[str]: Path to the output PDF file or None if an error occurs.
-    """
+def del_pdf_metadata(filename: str) -> WrittenFile:
+    """Write a copy of ``filename`` without the previous info keys."""
     return _process_pdf(filename, new_metadata={})
 
 
-def edit_pdf_metadata(filename: str, metadata: Dict[str, str]) -> Optional[str]:
-    """Edits the metadata of a PDF file and saves the output to a new file.
+def edit_pdf_metadata(filename: str, metadata: Mapping[str, str]) -> WrittenFile:
+    """Write a copy of ``filename`` whose info dictionary is ``metadata``.
 
-    Args:
-        filename (str): Path to the PDF file.
-        metadata (Dict[str, str]): Metadata to update.
-
-    Returns:
-        Optional[str]: Path to the output PDF file or None if an error occurs.
+    Keys may omit the leading slash. Values must be strings.
     """
-    formatted_metadata = {_metadata_key(key): value for key, value in metadata.items()}
-    return _process_pdf(filename, new_metadata=formatted_metadata)
+    checked = _STRING_MAP.validate_python(dict(metadata))
+    formatted = {_metadata_key(key): value for key, value in checked.items()}
+    return _process_pdf(filename, new_metadata=formatted)
 
 
 def _metadata_key(key: str) -> str:
@@ -65,42 +66,31 @@ def _metadata_key(key: str) -> str:
     return text
 
 
-def _process_pdf(filename: str, new_metadata: Dict[str, str]) -> Optional[str]:
-    """Processes a PDF file by either removing or updating its metadata.
-
-    Args:
-        filename (str): Path to the PDF file.
-        new_metadata (Dict[str, str]): New metadata to apply to the PDF.
-
-    Returns:
-        Optional[str]: Path to the output PDF file or None if an error occurs.
-    """
+def _process_pdf(filename: str, new_metadata: Dict[str, str]) -> WrittenFile:
+    """Copy ``filename`` and replace its document info."""
+    _require_file(filename)
     try:
-        with open(filename, 'rb') as file:
-            pdf = PdfReader(file)
+        with open(filename, "rb") as handle:
+            pdf = PdfReader(handle)
             output_pdf = PdfWriter()
-
-            # Add all pages to the output PDF
             for page in pdf.pages:
                 output_pdf.add_page(page)
-
-            # Apply new metadata
             output_pdf.add_metadata(new_metadata)
-
-            # Generate output folder and file paths
-            output_folder = os.path.join(os.path.dirname(filename), 'output_PDF')
+            output_folder = os.path.join(os.path.dirname(filename), "output_PDF")
             os.makedirs(output_folder, exist_ok=True)
             timestamp = str(int(time.time() * 1000))
             output_file_path = os.path.join(
-                output_folder, f'output_{timestamp}_{next(_output_ids)}.pdf'
+                output_folder, f"output_{timestamp}_{next(_output_ids)}.pdf"
             )
-
-            # Save the new PDF
-            with open(output_file_path, 'wb') as output_file:
+            with open(output_file_path, "wb") as output_file:
                 output_pdf.write(output_file)
-
-            return output_file_path
-    except FileNotFoundError:
+        return WrittenFile(path=output_file_path)
+    except ReadError:
         raise
-    except Exception:
-        return None
+    except Exception as exc:
+        raise ReadError(f"Could not write PDF metadata for {filename}") from exc
+
+
+def _require_file(filename: str) -> None:
+    if not os.path.isfile(filename):
+        raise FileNotFoundError(filename)

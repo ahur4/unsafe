@@ -155,7 +155,7 @@ def test_active_options_are_used_when_omitted():
     assert response.status == 200
     assert delays == [0.3]
     assert transport.calls[0]["timeout"] == 6
-    assert transport.calls[0]["headers"]["User-Agent"] == "unsafe/1.4.0"
+    assert transport.calls[0]["headers"]["User-Agent"] == "unsafe/2.0.0"
 
 
 def test_non_bytes_body_and_bad_header_values():
@@ -197,7 +197,14 @@ def test_request_rejects_bad_arguments():
 
 def test_response_json():
     transport = _Scripted([(200, b'{"n": 1}')])
-    assert request("http://example.test/json", transport=transport).json() == {"n": 1}
+    response = request("http://example.test/json", transport=transport)
+    assert response.json_body() == {"n": 1}
+    dumped = response.model_dump()
+    assert dumped["status"] == 200
+    assert dumped["text"] == '{"n": 1}'
+    import json
+
+    assert json.loads(response.model_dump_json())["status"] == 200
 
 
 def test_urllib_transport_is_mocked(monkeypatch):

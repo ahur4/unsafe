@@ -11,9 +11,9 @@ import logging
 import time
 import urllib.error
 import urllib.request
-from dataclasses import dataclass
-from types import MappingProxyType
-from typing import Callable, Dict, Mapping, Optional, Tuple
+from typing import Any, Callable, Dict, Mapping, Optional, Tuple
+
+from pydantic import BaseModel, ConfigDict, model_validator
 
 from .__version__ import __version__
 from .config import Options, get_options
@@ -27,25 +27,39 @@ _Transport = Callable[
 _Sleeper = Callable[[float], None]
 
 
-@dataclass(frozen=True)
-class Response:
-    """Completed HTTP response. A retryable status is still returned after the last attempt."""
+class Response(BaseModel):
+    """Completed HTTP response.
+
+    A retryable status is still returned after the last attempt. ``content``
+    is the raw body. ``text`` is that body decoded as UTF-8. ``model_dump``
+    includes both; in JSON, ``content`` is base64.
+    """
+
+    model_config = ConfigDict(frozen=True)
 
     status: int
-    headers: Mapping[str, str]
+    headers: Dict[str, str]
     url: str
     content: bytes
+    text: str = ""
 
-    @property
-    def text(self) -> str:
-        """Response body decoded as UTF-8, with invalid bytes replaced."""
-        return self.content.decode("utf-8", errors="replace")
+    @model_validator(mode="before")
+    @classmethod
+    def _decode_text(cls, value: object) -> object:
+        if not isinstance(value, dict) or "text" in value or "content" not in value:
+            return value
+        content = value["content"]
+        if not isinstance(content, bytes):
+            return value
+        decoded = dict(value)
+        decoded["text"] = content.decode("utf-8", errors="replace")
+        return decoded
 
-    def json(self):
+    def json_body(self) -> Any:
         """Parse the body as JSON."""
         import json
 
-        return json.loads(self.content.decode("utf-8"))
+        return json.loads(self.text)
 
 
 def request(
@@ -118,12 +132,13 @@ def request(
             continue
         return Response(
             status=int(status),
-            headers=MappingProxyType(dict(resp_headers)),
+            headers=dict(resp_headers),
             url=url,
             content=body if isinstance(body, bytes) else bytes(body),
         )
 
-    assert last_error is not None
+    if last_error is None:
+        raise RuntimeError("HTTP request ended without a response or error")
     raise last_error
 
 
@@ -141,10 +156,16 @@ def _pause(options: Options, attempt: int, sleeper: _Sleeper) -> None:
         sleeper(delay)
 
 
-def _header_map(headers) -> Dict[str, str]:
+def _header_map(headers: object) -> Dict[str, str]:
     if not headers:
         return {}
-    return {str(key): str(value) for key, value in headers.items()}
+    items = getattr(headers, "items", None)
+    if not callable(items):
+        return {}
+    raw = items()
+    if not isinstance(raw, list) and not hasattr(raw, "__iter__"):
+        return {}
+    return {str(key): str(value) for key, value in raw}
 
 
 def _urllib_transport(
@@ -159,4 +180,7 @@ def _urllib_transport(
     opener = urllib.request.build_opener(handler)
     req = urllib.request.Request(url, data=data, headers=dict(headers), method=method)
     with opener.open(req, timeout=timeout) as response:
-        return int(response.status), _header_map(response.headers), response.read()
+        body = response.read()
+        if not isinstance(body, bytes):
+            body = bytes(body)
+        return int(response.status), _header_map(response.headers), body

@@ -1,103 +1,81 @@
+"""Read and edit JPEG EXIF metadata.
+
+Success returns a pydantic model. A missing path raises ``FileNotFoundError``.
+A file that cannot be processed raises ``ReadError``.
+"""
+
+from __future__ import annotations
+
 import os
 from typing import Dict
+
+from unsafe.errors import ReadError
+from unsafe.models import ImageMetadata, WrittenFile
 
 from .exif import Image
 
 
-def get_image_metadata(path: str) -> Dict[str, str]:
-    """Extracts EXIF metadata from an **JPG** image file if available.
+def get_image_metadata(path: str) -> ImageMetadata:
+    """Return EXIF tags for a JPEG file.
 
-    Args:
-        path (str): The file path to the JPG image.
-
-    Returns:
-        Dict[str, str]: EXIF metadata, or an empty dictionary when the file has none.
-
-    Raises:
-        ValueError: If the provided path is not a valid file.
+    ``entries`` is empty when the file has no EXIF block.
     """
-    if not os.path.isfile(path):
-        raise ValueError(f"Provided path '{path}' is not a valid file.")
-
-    try:
-        with open(path, 'rb') as image_file:
-            image = Image(image_file)
-    except Exception as exc:
-        raise ValueError(f"Failed to open or process image file: {exc}") from exc
-
+    _require_file(path)
+    image = _open_image(path)
     if not image.has_exif:
-        return {}
-
-    exif_dict = {}
+        return ImageMetadata(path=path, entries={})
+    entries: Dict[str, str] = {}
     for tag in image.list_all():
         try:
-            exif_dict[tag] = str(image.get(tag))
+            entries[str(tag)] = str(image.get(tag))
         except KeyError:
-            continue  # Skip missing or unreadable EXIF tags
+            continue
+    return ImageMetadata(path=path, entries=entries)
 
-    return exif_dict
 
-
-def del_image_metadata(path: str) -> bool:
-    """Removes all EXIF metadata from an image file.
-
-    Args:
-        path (str): The file path to the image.
-
-    Returns:
-        bool: True if EXIF data was successfully removed, False if an error occurred.
-
-    Raises:
-        ValueError: If the provided path is not a valid file.
-    """
-    if not os.path.isfile(path):
-        raise ValueError(f"Provided path '{path}' is not a valid file.")
-
+def del_image_metadata(path: str) -> WrittenFile:
+    """Remove EXIF metadata from ``path`` itself."""
+    _require_file(path)
     try:
-        with open(path, 'rb') as image_file:
-            image = Image(image_file)
-
+        image = _open_image(path)
         if image.has_exif:
             image.delete_all()
+            with open(path, "wb") as handle:
+                handle.write(image.get_file())
+    except ReadError:
+        raise
+    except Exception as exc:
+        raise ReadError(f"Could not remove image metadata from {path}") from exc
+    return WrittenFile(path=path)
 
-            with open(path, 'wb') as new_image_file:
-                new_image_file.write(image.get_file())
 
-        return True
-
-    except Exception:
-        return False
-
-
-def edit_image_metadata(path: str, key: str, value: str) -> bool:
-    """Edits or adds EXIF metadata to an image file.
-
-    Args:
-        path (str): The file path to the image.
-        key (str): The EXIF tag to edit or add.
-        value (str): The new value for the EXIF tag.
-
-    Returns:
-        bool: True if the EXIF metadata was successfully edited, False if an error occurred.
-
-    Raises:
-        ValueError: If the provided path is not a valid file or image.
-    """
-    if not os.path.isfile(path):
-        raise ValueError(f"Provided path '{path}' is not a valid file.")
-
+def edit_image_metadata(path: str, key: str, value: str) -> WrittenFile:
+    """Set one EXIF tag on ``path`` itself."""
+    _require_file(path)
+    if not isinstance(key, str) or not isinstance(value, str):
+        raise TypeError("EXIF key and value must be strings")
     try:
-        with open(path, 'rb') as image_file:
-            image = Image(image_file)
-
-        # Modify or add the EXIF tag
+        image = _open_image(path)
         image[key] = value
+        with open(path, "wb") as handle:
+            handle.write(image.get_file())
+    except ReadError:
+        raise
+    except Exception as exc:
+        raise ReadError(f"Could not edit image metadata in {path}") from exc
+    return WrittenFile(path=path)
 
-        # Save the modified image back to the file
-        with open(path, 'wb') as new_image_file:
-            new_image_file.write(image.get_file())
 
-        return True
+def _require_file(path: str) -> None:
+    if not os.path.isfile(path):
+        raise FileNotFoundError(path)
 
-    except Exception:
-        return False
+
+def _open_image(path: str) -> Image:
+    try:
+        with open(path, "rb") as handle:
+            return Image(handle)
+    except ReadError:
+        raise
+    except Exception as exc:
+        raise ReadError(f"Could not open image {path}") from exc

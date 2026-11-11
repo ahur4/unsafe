@@ -24,7 +24,8 @@ requirements = [
     "plum-py>=0.8.7",
     "pypdf>=6.21.4",
     "PySocks>=1.7.1",
-    "requests>=2.32.3,<3",
+    "pydantic>=2.10",
+    "requests>=2.34.2,<3",
     "urllib3>=2.8.0,<3",
 ]
 
@@ -40,6 +41,7 @@ setup(
         "dev": [
             "pytest>=7.4,<8.4",
             "ruff>=0.6",
+            "mypy>=1.14",
         ],
     },
     keywords=[
@@ -52,7 +54,8 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(include=["unsafe", "unsafe.*"]),
-    python_requires=">=3.9",
+    package_data={"unsafe": ["py.typed"]},
+    python_requires=">=3.10",
     include_package_data=True,
     classifiers=[
         "Intended Audience :: Developers",
@@ -60,7 +63,6 @@ setup(
         "Operating System :: POSIX :: Linux",
         "Operating System :: MacOS",
         "Operating System :: Microsoft :: Windows",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",

@@ -1,8 +1,7 @@
 """Shared options for timeouts, headers, proxies, and output.
 
-This module is configuration plumbing. No other feature module reads it, so
-changing these values does not alter brute-force, exploit, scanner, or bypass
-behavior.
+This module is configuration plumbing. No attack, scanner, or brute-force
+module reads it.
 """
 
 from __future__ import annotations
@@ -12,37 +11,29 @@ import logging
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 from contextvars import ContextVar
-from dataclasses import dataclass, field, replace
-from types import MappingProxyType
-from typing import Any, Callable, Dict, Iterator, Mapping, Optional, Sequence, TypeVar
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Iterator,
+    List,
+    Literal,
+    Mapping,
+    Optional,
+    Sequence,
+    Tuple,
+    TypeVar,
+)
+
+from pydantic import BaseModel, ConfigDict, Field, ValidationInfo, field_validator
 
 T = TypeVar("T")
 R = TypeVar("R")
 
-_TEXT = "text"
-_JSON = "json"
-_OUTPUT_FORMATS = (_TEXT, _JSON)
+OutputFormat = Literal["text", "json"]
 
 
-def _require_int(name: str, value: int, minimum: int) -> int:
-    if isinstance(value, bool) or not isinstance(value, int):
-        raise TypeError(f"{name} must be an int")
-    if value < minimum:
-        raise ValueError(f"{name} must be >= {minimum}")
-    return value
-
-
-def _require_number(name: str, value: float, minimum: float) -> float:
-    if isinstance(value, bool) or not isinstance(value, (int, float)):
-        raise TypeError(f"{name} must be a number")
-    if value < minimum:
-        raise ValueError(f"{name} must be >= {minimum}")
-    return float(value)
-
-
-def _string_mapping(name: str, value: Optional[Mapping[str, str]]) -> Optional[Mapping[str, str]]:
-    if value is None:
-        return None
+def _copy_strings(name: str, value: object) -> Dict[str, str]:
     if not isinstance(value, Mapping):
         raise TypeError(f"{name} must be a mapping of str to str")
     copied: Dict[str, str] = {}
@@ -50,70 +41,124 @@ def _string_mapping(name: str, value: Optional[Mapping[str, str]]) -> Optional[M
         if not isinstance(key, str) or not isinstance(item, str):
             raise TypeError(f"{name} must be a mapping of str to str")
         copied[key] = item
-    return MappingProxyType(copied)
+    return copied
 
 
-@dataclass(frozen=True)
-class Options:
+class Options(BaseModel):
     """Process-wide defaults for the shared HTTP and output helpers.
 
-    Mappings are copied and frozen when the object is created. Use
-    :meth:`replace` to change a value. ``headers`` and ``proxies`` replace the
-    previous mapping; they are not merged.
+    The model is frozen and re-validates on :meth:`replace`. ``headers`` and
+    ``proxies`` replace the previous mapping; they are not merged. Both are
+    copied, so later changes to the dict you passed in are ignored.
+
+    JSON output is ``model_dump_json``. A plain dict is ``model_dump``.
     """
 
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
     timeout: float = 10.0
-    headers: Mapping[str, str] = field(default_factory=dict)
-    proxies: Optional[Mapping[str, str]] = None
+    headers: Dict[str, str] = Field(default_factory=dict)
+    proxies: Optional[Dict[str, str]] = None
     concurrency: int = 1
     verbosity: int = 0
-    output_format: str = _TEXT
+    output_format: OutputFormat = "text"
     max_attempts: int = 3
     backoff_factor: float = 0.5
-    retry_statuses: tuple = (429, 500, 502, 503, 504)
-    retry_methods: tuple = ("GET", "HEAD", "OPTIONS")
+    retry_statuses: Tuple[int, ...] = (429, 500, 502, 503, 504)
+    retry_methods: Tuple[str, ...] = ("GET", "HEAD", "OPTIONS")
 
-    def __post_init__(self) -> None:
-        timeout = _require_number("timeout", self.timeout, 0)
-        if timeout == 0:
+    @field_validator("timeout", "backoff_factor", mode="before")
+    @classmethod
+    def _reject_bool_number(cls, value: object) -> object:
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise TypeError("expected a number")
+        return value
+
+    @field_validator("timeout")
+    @classmethod
+    def _positive_timeout(cls, value: float) -> float:
+        if value <= 0:
             raise ValueError("timeout must be > 0")
-        object.__setattr__(self, "timeout", timeout)
-        object.__setattr__(self, "concurrency", _require_int("concurrency", self.concurrency, 1))
-        object.__setattr__(self, "verbosity", _require_int("verbosity", self.verbosity, 0))
-        object.__setattr__(self, "max_attempts", _require_int("max_attempts", self.max_attempts, 1))
-        object.__setattr__(
-            self, "backoff_factor", _require_number("backoff_factor", self.backoff_factor, 0)
-        )
+        return float(value)
 
-        output_format = str(self.output_format).lower()
-        if output_format not in _OUTPUT_FORMATS:
-            allowed = ", ".join(_OUTPUT_FORMATS)
-            raise ValueError(f"output_format must be one of: {allowed}")
-        object.__setattr__(self, "output_format", output_format)
+    @field_validator("backoff_factor")
+    @classmethod
+    def _non_negative_backoff(cls, value: float) -> float:
+        if value < 0:
+            raise ValueError("backoff_factor must be >= 0")
+        return float(value)
 
-        headers = _string_mapping("headers", self.headers) or MappingProxyType({})
-        object.__setattr__(self, "headers", headers)
-        object.__setattr__(self, "proxies", _string_mapping("proxies", self.proxies))
+    @field_validator("concurrency", "verbosity", "max_attempts", mode="before")
+    @classmethod
+    def _reject_bool_int(cls, value: object, info: ValidationInfo) -> object:
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise TypeError(f"{info.field_name} must be an int")
+        return value
 
-        statuses = []
-        for status in self.retry_statuses:
+    @field_validator("concurrency", "max_attempts")
+    @classmethod
+    def _at_least_one(cls, value: int, info: ValidationInfo) -> int:
+        if value < 1:
+            raise ValueError(f"{info.field_name} must be >= 1")
+        return value
+
+    @field_validator("verbosity")
+    @classmethod
+    def _non_negative_verbosity(cls, value: int) -> int:
+        if value < 0:
+            raise ValueError("verbosity must be >= 0")
+        return value
+
+    @field_validator("output_format", mode="before")
+    @classmethod
+    def _normalize_format(cls, value: object) -> object:
+        if isinstance(value, str):
+            return value.lower()
+        return value
+
+    @field_validator("headers", mode="before")
+    @classmethod
+    def _headers(cls, value: object) -> Dict[str, str]:
+        return _copy_strings("headers", value)
+
+    @field_validator("proxies", mode="before")
+    @classmethod
+    def _proxies(cls, value: object) -> Optional[Dict[str, str]]:
+        if value is None:
+            return None
+        return _copy_strings("proxies", value)
+
+    @field_validator("retry_statuses", mode="before")
+    @classmethod
+    def _statuses(cls, value: object) -> Tuple[int, ...]:
+        if isinstance(value, (str, bytes)) or not isinstance(value, Sequence):
+            raise TypeError("retry_statuses must be a sequence of HTTP status codes")
+        statuses: List[int] = []
+        for status in value:
             if isinstance(status, bool) or not isinstance(status, int):
                 raise TypeError("retry_statuses must contain integers")
             if status < 100 or status > 599:
                 raise ValueError("retry_statuses must be HTTP status codes")
             statuses.append(status)
-        object.__setattr__(self, "retry_statuses", tuple(statuses))
+        return tuple(statuses)
 
-        methods = []
-        for method in self.retry_methods:
+    @field_validator("retry_methods", mode="before")
+    @classmethod
+    def _methods(cls, value: object) -> Tuple[str, ...]:
+        if isinstance(value, (str, bytes)) or not isinstance(value, Sequence):
+            raise TypeError("retry_methods must be a sequence of HTTP method names")
+        methods: List[str] = []
+        for method in value:
             if not isinstance(method, str) or not method.strip():
                 raise TypeError("retry_methods must contain HTTP method names")
             methods.append(method.upper())
-        object.__setattr__(self, "retry_methods", tuple(methods))
+        return tuple(methods)
 
     def replace(self, **overrides: Any) -> "Options":
-        """Return a copy with ``overrides`` applied."""
-        return replace(self, **overrides)
+        """Return a validated copy with ``overrides`` applied."""
+        merged = self.model_dump()
+        merged.update(overrides)
+        return Options.model_validate(merged)
 
 
 _CURRENT: ContextVar[Options] = ContextVar("unsafe_options", default=Options())
@@ -162,22 +207,35 @@ def apply_verbosity(options: Optional[Options] = None) -> None:
 
 
 def render(value: Any, options: Optional[Options] = None) -> str:
-    """Format ``value`` as text or JSON using the active output format."""
+    """Format ``value`` as text or JSON using the active output format.
+
+    Pydantic models use :meth:`~pydantic.BaseModel.model_dump_json` for JSON
+    and :meth:`~pydantic.BaseModel.model_dump` for text. Other values use
+    ``json.dumps`` or ``key: value`` lines.
+    """
+    from pydantic import BaseModel
+
     opts = options if options is not None else get_options()
-    if opts.output_format == _JSON:
-        return json.dumps(value, default=str, indent=2, sort_keys=True)
-    if isinstance(value, Mapping):
-        return "\n".join(f"{key}: {item}" for key, item in value.items())
-    if isinstance(value, (list, tuple)):
-        return "\n".join(str(item) for item in value)
-    return str(value)
+    if isinstance(value, BaseModel):
+        if opts.output_format == "json":
+            return value.model_dump_json(indent=2)
+        payload: Any = value.model_dump()
+    else:
+        payload = value
+    if opts.output_format == "json":
+        return json.dumps(payload, default=str, indent=2, sort_keys=True)
+    if isinstance(payload, Mapping):
+        return "\n".join(f"{key}: {item}" for key, item in payload.items())
+    if isinstance(payload, (list, tuple)):
+        return "\n".join(str(item) for item in payload)
+    return str(payload)
 
 
 def map_concurrent(
     function: Callable[[T], R],
     items: Sequence[T],
     options: Optional[Options] = None,
-) -> list:
+) -> List[R]:
     """Apply ``function`` to ``items``, using ``options.concurrency`` workers.
 
     This is a generic helper. No scanner, finder, or exploit module calls it.

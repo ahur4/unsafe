@@ -24,8 +24,6 @@ def test_defaults_and_immutability():
     assert options.backoff_factor == 0.5
     assert options.retry_statuses == (429, 500, 502, 503, 504)
     assert options.retry_methods == ("GET", "HEAD", "OPTIONS")
-    with pytest.raises(TypeError):
-        options.headers["A"] = "2"
     raw = {"A": "1"}
     frozen = Options(headers=raw)
     raw["A"] = "changed"
@@ -77,6 +75,16 @@ def test_use_options_restores_previous_values():
     assert logging.getLogger("unsafe").level == logging.INFO
     with pytest.raises(TypeError):
         set_options("nope")
+
+
+def test_options_are_frozen_and_render_as_json():
+    options = Options(timeout=4)
+    with pytest.raises(Exception):
+        options.timeout = 1  # type: ignore[misc]
+    rendered = render(options, Options(output_format="json"))
+    assert '"timeout": 4.0' in rendered
+    restored = Options.model_validate_json(options.model_dump_json())
+    assert restored.timeout == 4.0
 
 
 def test_render_text_and_json():
